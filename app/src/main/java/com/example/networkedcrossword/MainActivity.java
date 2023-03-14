@@ -1,12 +1,12 @@
 package com.example.networkedcrossword;
 
 import static java.lang.Thread.sleep;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO: Clean up if interrupted
-    private Runnable updateTextWithTime = new Runnable() {
+    public Runnable updateTextWithTime = new Runnable() {
         Integer i = 0;
 
         @Override public void run() {
@@ -60,6 +60,43 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Send the string over! " + text);
 //        handler.post(runnable);
 //        new Thread(runnable).start();
+    }
+
+
+    public void createGame(View view) {
+
+        TextView codeTextBox = findViewById(R.id.code);
+//        output.setText("You touched me");
+        String text = codeTextBox.getText().toString();
+
+        // Check that the code is the right length and alert if not
+        if(text.length() != 3) {
+            Toast.makeText(this, "Code must be length 3", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        System.out.println("Starting a server, with join code: " + text);
+
+        // TODO: call server code here
+
+    }
+
+    public void joinGame(View view) {
+
+        TextView codeTextBox = findViewById(R.id.code);
+//        output.setText("You touched me");
+        String text = codeTextBox.getText().toString();
+
+        // Check that the code is the right length and alert if not
+        if(text.length() != 3) {
+            Toast.makeText(this, "Code must be length 3", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        System.out.println("Joining server with code: " + text);
+
+        // TODO: call client code here
+
     }
 
 
