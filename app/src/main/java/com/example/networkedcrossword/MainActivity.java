@@ -2,14 +2,16 @@ package com.example.networkedcrossword;
 
 import static java.lang.Thread.sleep;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity {
 
+    private NetworkThread serverThread;
+    private NetworkThread clientThread;
 //    private Handler handler;
 
     @Override
@@ -17,18 +19,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        handler = new Handler();
         new Thread(updateTextWithTime).start();
 
     }
 
     // TODO: Clean up if interrupted
-    public Runnable updateTextWithTime = new Runnable() {
+    public final Runnable updateTextWithTime = new Runnable() {
         Integer i = 0;
 
-        @Override public void run() {
+        @Override
+        public void run() {
             TextView output = findViewById(R.id.writeAnything);
-            while(true) {
+            while (true) {
                 i++;
                 try {
                     sleep(1000);
@@ -44,10 +46,14 @@ public class MainActivity extends AppCompatActivity {
                         output.setText(i.toString());
                     }
                 });
-//                System.out.println(i);
             }
 
         }
+        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+//        if (Thread.interrupted()) {
+//            System.out.println("Thread interrupted");
+//            break;
+//        }
     };
 
 
@@ -68,18 +74,42 @@ public class MainActivity extends AppCompatActivity {
         TextView codeTextBox = findViewById(R.id.code);
 //        output.setText("You touched me");
         String text = codeTextBox.getText().toString();
-
+        // InetAddress host = InetAddress.getLocalHost();
         // Check that the code is the right length and alert if not
-        if(text.length() != 3) {
-            Toast.makeText(this, "Code must be length 3", Toast.LENGTH_SHORT).show();
+        if(text.length() != 4) {
+            Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        System.out.println("Starting a server, with join code: " + text);
+        System.out.println("Starting a server, on port number: " + text);
 
         // TODO: call server code here
+        // create server
+        int portNumber;
+        try {
+            portNumber = Integer.parseInt(text);
+        }
+        catch (NumberFormatException e) {
+            portNumber = 1880;
+        }
+
+        serverThread = new NetworkThread("Server", text, "localhost", portNumber);
+        serverThread.start();
+//        server();
+
+
 
     }
+
+
+//    public void server() {
+//        // start server
+//
+//        // wait for client to connect
+//
+//        // start game
+//    }
+
 
     public void joinGame(View view) {
 
@@ -88,16 +118,26 @@ public class MainActivity extends AppCompatActivity {
         String text = codeTextBox.getText().toString();
 
         // Check that the code is the right length and alert if not
-        if(text.length() != 3) {
-            Toast.makeText(this, "Code must be length 3", Toast.LENGTH_SHORT).show();
+        if(text.length() != 4) {
+            Toast.makeText(this, "Port Numbermust be length 4 and Match server port", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        System.out.println("Joining server with code: " + text);
+        // System.out.println("Joining server with code: " + text);
+        int portNumber;
+        try {
+            portNumber = Integer.parseInt(text);
+        }
+        catch (NumberFormatException e) {
+            portNumber = 1880;
+        }
 
         // TODO: call client code here
+        clientThread = new NetworkThread("Client", text, "localhost", portNumber);
+        clientThread.start();
 
     }
+
 
 
 }
