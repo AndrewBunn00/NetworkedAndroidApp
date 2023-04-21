@@ -27,8 +27,12 @@ public class Client {
             int i = 0;
 
             // Read lines from the server
-            while (i < 10) {
-                System.out.println("Client received: " + rdr.readLine());
+            while (true) {
+                String read = rdr.readLine();
+                System.out.println("[maybe] Client received: " + read);
+                if(read == null) {
+                    break;
+                }
                 i++;
             }
             client.close();
@@ -36,7 +40,6 @@ public class Client {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }
