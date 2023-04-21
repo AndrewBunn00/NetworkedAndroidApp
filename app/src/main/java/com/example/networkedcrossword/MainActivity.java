@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.15", portNumber);
+        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber);
         clientThread.start();
 
     }

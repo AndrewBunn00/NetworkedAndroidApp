@@ -26,7 +26,6 @@ public class Server {
             setupReadAndWrite();
             while(true) {
                 sendClientMessages();
-//                getClientMessages();
             }
 //            sendClientMessages();
 //            getClientMessages();
