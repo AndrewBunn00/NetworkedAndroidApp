@@ -101,16 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-//    public void server() {
-//        // start server
-//
-//        // wait for client to connect
-//
-//        // start game
-//    }
-
-
     public void joinGame(View view) {
 
         TextView codeTextBox = findViewById(R.id.code);
@@ -136,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
         clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber);
         clientThread.start();
 
+    }
+
+    public void startGameButton(View view) {
+        System.out.println("ENTERING GAME WINDOW");
     }
 
 
