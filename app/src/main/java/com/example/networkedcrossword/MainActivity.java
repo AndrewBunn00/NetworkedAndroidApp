@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGameButton(View view) {
         System.out.println("ENTERING GAME WINDOW");
+        startActivity(new android.content.Intent(this, GameActivity.class));
     }
 
 
