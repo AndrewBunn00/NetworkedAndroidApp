@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        serverThread = new NetworkThread("Server", text, "localhost", portNumber);
+        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber);
         serverThread.start();
 //        server();
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "localhost", portNumber);
+        clientThread = new NetworkThread("Client", text, "10.0.2.15", portNumber);
         clientThread.start();
 
     }

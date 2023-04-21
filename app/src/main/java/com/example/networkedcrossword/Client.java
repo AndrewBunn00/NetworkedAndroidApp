@@ -1,6 +1,8 @@
 package com.example.networkedcrossword;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Client {
@@ -20,6 +22,16 @@ public class Client {
 
         try {
             client = new Socket(ip, port);
+            System.out.println("Client connected to " + ip + ":" + port);
+            BufferedReader rdr = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            int i = 0;
+
+            // Read lines from the server
+            while (i < 10) {
+                System.out.println("Client received: " + rdr.readLine());
+                i++;
+            }
+            client.close();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -28,3 +40,4 @@ public class Client {
 
     }
 }
+

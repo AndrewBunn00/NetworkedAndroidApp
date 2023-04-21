@@ -12,7 +12,7 @@ public class Server {
     ServerSocket serverSocket;
     Socket clientSocket;
     private BufferedReader readIn;
-    private PrintWriter writeOut;
+    private BufferedWriter writeOut;
     public Server(int port) {
         this.port = port;
     }
@@ -22,24 +22,38 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(port);
-
+            waitForClientConnection();
+            setupReadAndWrite();
+            while(true) {
+                sendClientMessages();
+//                getClientMessages();
+            }
+//            sendClientMessages();
+//            getClientMessages();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        waitForClientConnection();
-
         // Client connected, start listening for messages
-        setupReadAndWrite();
-        getClientMessages();
+
+    }
+
+    private void sendClientMessages() {
+        try {
+            writeOut.write("Hello from server\n");
+            writeOut.flush();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     private void setupReadAndWrite() {
         try {
             readIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            writeOut = new PrintWriter(clientSocket.getOutputStream(), true);
+            writeOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -64,6 +78,7 @@ public class Server {
         try {
             message = readIn.readLine();
         } catch (IOException e) {
+            System.out.println("readIn.readLine() failed");
             throw new RuntimeException(e);
         }
         System.out.println("MADE IT TO CLIENT MESSAGE STUFF\n");
@@ -71,7 +86,13 @@ public class Server {
         // while there are still messages, keep reading and sending them
         while(message != null) {
             System.out.println("Message from client: " + message);
-            writeOut.println("Server received message: " + message);
+            try{
+                writeOut.write("Server received message: " + message + "\n");
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+//            writeOut.println("Server received message: " + message);
             try {
                 message = readIn.readLine();
             } catch (IOException e) {
@@ -82,7 +103,12 @@ public class Server {
 
         // if there are no more messages, close the connection
         System.out.println("Client disconnected");
-        writeOut.close();
+        try {
+            writeOut.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         try {
             readIn.close();
         } catch (IOException e) {
@@ -92,3 +118,4 @@ public class Server {
 
 
 }
+
