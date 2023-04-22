@@ -60,12 +60,9 @@ public class MainActivity extends AppCompatActivity {
     public void submitOnClick(View view) {
 
         TextView textBox = findViewById(R.id.writeAnything);
-//        output.setText("You touched me");
         String text = textBox.getText().toString();
 
         System.out.println("Send the string over! " + text);
-//        handler.post(runnable);
-//        new Thread(runnable).start();
     }
 
 
@@ -83,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("Starting a server, on port number: " + text);
 
-        // TODO: call server code here
         // create server
         int portNumber;
         try {
@@ -95,9 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber);
         serverThread.start();
-//        server();
-
-
 
     }
 
@@ -122,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        // TODO: call client code here
         clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber);
         clientThread.start();
 
