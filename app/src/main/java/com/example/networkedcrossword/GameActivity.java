@@ -93,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
 
         // Get the dictionary items and display it
         gridView = (GridView) findViewById(R.id.promptView);
-        Dict dict = new Dict(6, 9, this.getApplicationContext());
+        Dict dict = new Dict(6, 9, this);
 
         try {
             dict.build();
@@ -115,34 +115,29 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Word");
         TextInputLayout input = new TextInputLayout(this);
-//        EditText editText = new EditText(getApplicationContext());
-        TextInputEditText textInputEditText =  new TextInputEditText(this);
-/*
-TODO: I (Raj) need to fix exception I commented this out so when you pull its not broke
-        if(input.getChildCount() > 0) {
-            input.removeAllViews();
-        } else {
-            input.setHint("Words");
-            input.addView(textInputEditText);
-        }
 
+        input.setHint("Words");
+        TextInputEditText textInputEditText =  new TextInputEditText(this);
+        input.addView(textInputEditText);
+
+        //Building alertDialog for when a hint for guessing is clicked.
+        // TODO: need to map buttons to actual functions when progress is there
+        AlertDialog alertDialog = builder
+                .setTitle("Enter Word")
+                .setView(input)
+                .setMessage("Enter your Guess")
+                .setPositiveButton("Submit", (dialogInterface, i1) -> System.out.println("hello"))
+                .setNegativeButton("Cancel", (dialogInterface, i12) -> {System.out.println("EXIT"); }).create();
+
+        //show the alertDialog when grid position is clicked
         gridView.setOnItemClickListener((adapterView, view, i, l) -> {
             try {
-                builder
-                        .setTitle("Enter Word")
-                        .setView(input)
-                        .setMessage("Enter your Guess")
-                        .setPositiveButton("Submit", (dialogInterface, i1) -> System.out.println("hello"))
-                        .setNegativeButton("Cancel", (dialogInterface, i12) -> {}).show();
+                alertDialog.show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-
- */
     }
-
-
     // Initialize the board
     private void setupBoard(int numSquares) {
         gridAdapter = new GridSquareAdapter(this, setupSquares(numSquares));
