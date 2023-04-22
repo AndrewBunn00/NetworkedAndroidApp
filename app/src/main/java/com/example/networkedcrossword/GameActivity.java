@@ -2,14 +2,20 @@ package com.example.networkedcrossword;
 
 import static java.lang.Math.min;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -77,33 +83,26 @@ public class GameActivity extends AppCompatActivity {
 
         int count = 0;
         for(String word:word_set) {
-            word_list[count++] = count + " _____" + map.get(word) + "Word length is " + word.length();
+            word_list[count++] = count + " _____:" + map.get(word) + "Word length is " + word.length();
         }
-
-
-
-
-
-
-
-
-
-
-
-//        for (int i = 0; i < word.length; i++) {
-//            for (int j = 0; i < word.length; j++) {
-//                word[i] = String.valueOf(j);
-//            }
-//        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,word_list);
         gridView.setAdapter(adapter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(this.get, ""+word_list[i].toString(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Word");
+        TextInputLayout input = new TextInputLayout(this);
+        EditText editText = new EditText(getApplicationContext());
+        input.setHint("Words");
+        input.addView(editText);
+
+        gridView.setOnItemClickListener((adapterView, view, i, l) -> {
+              builder
+                    .setTitle("Enter Word")
+                    .setView(input)
+                    .setMessage("Enter your Guess")
+                    .setPositiveButton("Submit", (dialogInterface, i1) -> System.out.println("hello"))
+                    .setNegativeButton("Cancel", (dialogInterface, i12) -> {
+                    }).show();
+        });
     }
 }
