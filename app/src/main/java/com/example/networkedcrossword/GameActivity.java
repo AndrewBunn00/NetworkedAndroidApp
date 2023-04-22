@@ -42,7 +42,7 @@ public class GameActivity extends AppCompatActivity {
         boardView.setX(offset/2);
 
         gridView = (GridView) findViewById(R.id.gameBoardView);
-        Dict dict = new Dict(6, 19, this.getApplicationContext());
+        Dict dict = new Dict(6, 9, this.getApplicationContext());
         try {
             dict.build();
         } catch (IOException e) {
@@ -53,8 +53,9 @@ public class GameActivity extends AppCompatActivity {
         HashMap<String, String> map = dict.get_dict();
         int count = 0;
         for(String word:word_set) {
-            word_list[count++] = count + " " + map.get(word);
+            word_list[count++] = count + " _____" + map.get(word) + "Word length is " + word.length();
         }
+
 //        for (int i = 0; i < word.length; i++) {
 //            for (int j = 0; i < word.length; j++) {
 //                word[i] = String.valueOf(j);
