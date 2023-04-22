@@ -44,7 +44,7 @@ public class Client {
         catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }

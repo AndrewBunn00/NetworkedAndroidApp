@@ -4,6 +4,8 @@ package com.example.networkedcrossword;
 // import java.io.IOException;
 // import java.net.ServerSocket;
 // import java.net.Socket;
+import static java.lang.Thread.sleep;
+
 import java.io.*;
 import java.net.*;
 
@@ -26,12 +28,15 @@ public class Server {
             setupReadAndWrite();
 
             while(true) {
+                sleep(1000);
                 sendClientMessages();
                 receiveClientMessages();
             }
 
         }
         catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
