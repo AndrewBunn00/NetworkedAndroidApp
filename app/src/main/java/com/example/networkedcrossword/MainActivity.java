@@ -64,17 +64,13 @@ public class MainActivity extends AppCompatActivity {
         String text = textBox.getText().toString();
 
         System.out.println("Send the string over! " + text);
-//        handler.post(runnable);
-//        new Thread(runnable).start();
     }
 
 
     public void createGame(View view) {
 
         TextView codeTextBox = findViewById(R.id.code);
-//        output.setText("You touched me");
         String text = codeTextBox.getText().toString();
-        // InetAddress host = InetAddress.getLocalHost();
         // Check that the code is the right length and alert if not
         if(text.length() != 4) {
             Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
@@ -95,20 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
         serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber);
         serverThread.start();
-//        server();
-
-
 
     }
 
-
-//    public void server() {
-//        // start server
-//
-//        // wait for client to connect
-//
-//        // start game
-//    }
 
 
     public void joinGame(View view) {

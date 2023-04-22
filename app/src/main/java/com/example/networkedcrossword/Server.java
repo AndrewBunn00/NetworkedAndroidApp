@@ -24,11 +24,12 @@ public class Server {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();
             setupReadAndWrite();
+
             while(true) {
                 sendClientMessages();
+                receiveClientMessages();
             }
-//            sendClientMessages();
-//            getClientMessages();
+
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -36,6 +37,16 @@ public class Server {
 
         // Client connected, start listening for messages
 
+    }
+
+    private void receiveClientMessages() {
+        try {
+            String read = readIn.readLine();
+            System.out.println("[] Server received: " + read + "\n");
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void sendClientMessages() {
