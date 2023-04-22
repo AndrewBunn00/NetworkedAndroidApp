@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
@@ -114,19 +115,31 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Word");
         TextInputLayout input = new TextInputLayout(this);
-        EditText editText = new EditText(getApplicationContext());
-        input.setHint("Words");
-        input.addView(editText);
+//        EditText editText = new EditText(getApplicationContext());
+        TextInputEditText textInputEditText =  new TextInputEditText(this);
+/*
+TODO: I (Raj) need to fix exception I commented this out so when you pull its not broke
+        if(input.getChildCount() > 0) {
+            input.removeAllViews();
+        } else {
+            input.setHint("Words");
+            input.addView(textInputEditText);
+        }
 
         gridView.setOnItemClickListener((adapterView, view, i, l) -> {
-              builder
-                    .setTitle("Enter Word")
-                    .setView(input)
-                    .setMessage("Enter your Guess")
-                    .setPositiveButton("Submit", (dialogInterface, i1) -> System.out.println("hello"))
-                    .setNegativeButton("Cancel", (dialogInterface, i12) -> {
-                    }).show();
+            try {
+                builder
+                        .setTitle("Enter Word")
+                        .setView(input)
+                        .setMessage("Enter your Guess")
+                        .setPositiveButton("Submit", (dialogInterface, i1) -> System.out.println("hello"))
+                        .setNegativeButton("Cancel", (dialogInterface, i12) -> {}).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
+
+ */
     }
 
 
