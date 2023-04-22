@@ -18,17 +18,21 @@ import android.widget.GridView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 public class GameActivity extends AppCompatActivity {
     GridView gridView;
+    GridView testBoard;
+    GridSquareAdapter gridAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         View promptView = findViewById(R.id.promptView);
-        View gameBoardView = findViewById(R.id.gameBoard);
+        GridView gameBoardView = findViewById(R.id.gameBoard);
 
         // Get the naviation bar size
         int offset = 20;
@@ -65,6 +69,25 @@ public class GameActivity extends AppCompatActivity {
         // Center the gameBoardView between the top of the screen and the top of the promptView
         gameBoardView.setY(windowHeight - heightNavigationBar - size - heightSizeUpdated);
         gameBoardView.setX(offset/2);
+
+
+
+//        testBoard = findViewById(R.id.gameBoard);
+        // Already had as gameBoardView
+        ArrayList<GridSquareModel> allSquares = new ArrayList<GridSquareModel>();
+
+        allSquares.add(new GridSquareModel(0));
+        allSquares.add(new GridSquareModel(1));
+        allSquares.add(new GridSquareModel(2));
+        allSquares.add(new GridSquareModel(3));
+        allSquares.add(new GridSquareModel(4));
+        allSquares.add(new GridSquareModel(5));
+        allSquares.add(new GridSquareModel(6));
+        allSquares.add(new GridSquareModel(7));
+        allSquares.add(new GridSquareModel(8));
+
+        gridAdapter = new GridSquareAdapter(this, allSquares);
+        gameBoardView.setAdapter(gridAdapter);
 
 
         // Get the dictionary items and display it
@@ -105,4 +128,25 @@ public class GameActivity extends AppCompatActivity {
                     }).show();
         });
     }
+
+
+    // Initialize the board
+    private void setupBoard(int numSquares) {
+        gridAdapter = new GridSquareAdapter(this, setupSquares(numSquares));
+        testBoard = findViewById(R.id.gameBoard);
+        testBoard.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+        testBoard.setAdapter(gridAdapter);
+    }
+
+    // Create a list of GridSquareModel objects
+    private ArrayList<GridSquareModel> setupSquares(int numSquares) {
+        ArrayList<GridSquareModel> allSquares = new ArrayList<GridSquareModel>();
+
+        for (int i = 0; i < numSquares; i++) {
+            allSquares.add(new GridSquareModel(i));
+        }
+        return allSquares;
+    }
+
+
 }
