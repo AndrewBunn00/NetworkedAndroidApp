@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NetworkThread serverThread;
     private NetworkThread clientThread;
+    private Data data = new Data();
 //    private Handler handler;
 
     @Override
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new Thread(updateTextWithTime).start();
+//        new Thread(updateTextWithTime).start();
 
     }
 
@@ -64,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         String text = textBox.getText().toString();
 
         System.out.println("Send the string over! " + text);
+        String msg = data.toJson("key:" + text);
+
+        data.setData(msg);
+//        data.setData(text);
+//        data.prepDataForSend();
+
     }
 
 
