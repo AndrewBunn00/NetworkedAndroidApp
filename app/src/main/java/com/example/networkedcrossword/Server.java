@@ -32,8 +32,11 @@ public class Server {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages();
                     data.setCan_write();
+                } else if(data.can_read()) {
+                    receiveClientMessages();
+                    data.set_read();
+
                 }
-                receiveClientMessages();
             }
 
         }

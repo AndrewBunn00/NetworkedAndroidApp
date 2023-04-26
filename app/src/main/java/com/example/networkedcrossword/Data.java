@@ -14,6 +14,7 @@ public class Data {
     private int player2_score = 0;
     private int turn;
     private boolean can_write = false;
+    private boolean can_read = false;
 
     private int total_words;
 
@@ -26,9 +27,10 @@ public class Data {
         return data;
     }
 
-    public void setData(String data, boolean write) {
+    public void setData(String data, boolean write, boolean read) {
         this.data = data;
         this.can_write = write;
+        this.can_read = read;
     }
 
     public boolean isCan_write() {
@@ -54,7 +56,6 @@ public class Data {
             return false;
         }
     }
-
     public boolean complete() {
         return (this.player1_score + this.player2_score) == (this.total_words) ;
     }
@@ -90,4 +91,11 @@ public class Data {
 
     }
 
+    public void set_read() {
+        this.can_read = !can_read;
+    }
+
+    public boolean can_read() {
+        return can_read;
+    }
 }

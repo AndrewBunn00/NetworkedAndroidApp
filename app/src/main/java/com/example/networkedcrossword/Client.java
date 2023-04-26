@@ -35,17 +35,22 @@ public class Client {
             // Read lines from the server
             while (true) {
                 sleep(1000);
-                String read = rdr.readLine();
+                String read = "";
+                if(data.can_read()) {
+                    read = rdr.readLine();
+                    System.out.println("[] Client received: " + read + i + "\n");
+                    if (read == null) {
+                        break;
+                    }
+                    data.set_read();
 
-                System.out.println("[] Client received: " + read + i + "\n");
-                if(read == null) {
-                    break;
-                }
-                if(data.isCan_write()) {
+                }else if(data.isCan_write()) {
                     System.out.println("INSIDE CAN WRITE FLAG CLIENT");
-                    wrtr.write("Hello from client " + i + "\n");
+                    wrtr.write("Hello from client " + read + "\n");
                     wrtr.flush();
                     data.setCan_write();
+                } else {
+                    continue;
                 }
                 i++;
             }
