@@ -10,6 +10,9 @@ public class Client {
     private int port;
     private String ip;
     private Data data;
+    private Data old_data;
+    boolean flag;
+
 
     public Client(String ip, int port, String message, Data data) {
         this.port = port;
@@ -33,12 +36,17 @@ public class Client {
             while (true) {
                 sleep(1000);
                 String read = rdr.readLine();
+
                 System.out.println("[] Client received: " + read + i + "\n");
                 if(read == null) {
                     break;
                 }
-                wrtr.write("Hello from client " + i + "\n");
-                wrtr.flush();
+                if(data.isCan_write()) {
+                    System.out.println("INSIDE CAN WRITE FLAG CLIENT");
+                    wrtr.write("Hello from client " + i + "\n");
+                    wrtr.flush();
+                    data.setCan_write();
+                }
                 i++;
             }
             client.close();
@@ -49,6 +57,11 @@ public class Client {
             e.printStackTrace();
         }
 
+    }
+    public boolean data_diff() {
+        //compare values from old_data and data
+
+        return true;
     }
 }
 
