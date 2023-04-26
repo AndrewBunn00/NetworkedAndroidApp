@@ -9,10 +9,12 @@ public class Client {
     Socket client;
     private int port;
     private String ip;
+    private Data data;
 
-    public Client(String ip, int port, String message) {
+    public Client(String ip, int port, String message, Data data) {
         this.port = port;
         this.ip = ip;
+        this.data = data;
 
         System.out.println("Client created on " + ip + ":" + port + " with message " + message);
     }

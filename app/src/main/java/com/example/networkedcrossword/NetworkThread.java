@@ -7,13 +7,15 @@ public class NetworkThread extends Thread {
     private String message;
     private String ip;
     private int port;
+    private Data data;
 
     // Constructor
-    public NetworkThread(String serverOrClient, String message, String ip, int port) {
+    public NetworkThread(String serverOrClient, String message, String ip, int port, Data data) {
         this.serverOrClient = serverOrClient;
         this.message = message;
         this.ip = ip;
         this.port = port;
+        this.data = data;
     }
 
     @Override
@@ -43,11 +45,11 @@ public class NetworkThread extends Thread {
 
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
-            Server server = new Server(port);
+            Server server = new Server(port, data);
             server.serverStart();
         }
         else if(Objects.equals(serverOrClient, "Client")) {
-            Client client = new Client(ip, port, message);
+            Client client = new Client(ip, port, message, data);
             client.clientStart();
         }
         else {

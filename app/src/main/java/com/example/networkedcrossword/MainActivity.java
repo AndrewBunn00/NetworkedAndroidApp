@@ -65,12 +65,9 @@ public class MainActivity extends AppCompatActivity {
         String text = textBox.getText().toString();
 
         System.out.println("Send the string over! " + text);
+
         String msg = data.toJson("key:" + text);
-
         data.setData(msg);
-//        data.setData(text);
-//        data.prepDataForSend();
-
     }
 
 
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber);
+        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
         serverThread.start();
 
     }
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber);
+        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
         clientThread.start();
 
     }

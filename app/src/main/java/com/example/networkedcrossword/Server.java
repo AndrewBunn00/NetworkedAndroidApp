@@ -13,8 +13,10 @@ public class Server {
     Socket clientSocket;
     private BufferedReader readIn;
     private BufferedWriter writeOut;
-    public Server(int port) {
+    private Data data;
+    public Server(int port, Data data) {
         this.port = port;
+        this.data = data;
     }
 
     public void serverStart() {
@@ -51,7 +53,7 @@ public class Server {
 
     private void sendClientMessages() {
         try {
-            writeOut.write("Hello from server\n");
+            writeOut.write("Hello from server " + data.getData() + "\n");
             writeOut.flush();
         }
         catch (IOException e) {
