@@ -75,9 +75,7 @@ public class Server {
 
     private void sendClientMessages(int i) {
         try {
-//            writeOut.write("Hello from server " + data.getData() + "\n");
-            writeOut.write("Hello from server " + i + "\n");
-
+            writeOut.write("Hello from server " + data.getData() + "\n");
             writeOut.flush();
         }
         catch (IOException e) {

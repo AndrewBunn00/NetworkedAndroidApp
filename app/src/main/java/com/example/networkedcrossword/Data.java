@@ -16,6 +16,7 @@ public class Data {
     private boolean can_write = false;
     private boolean can_read = false;
     private boolean disable_button = false;
+    private boolean is_player1 = false;
 
     private int total_words;
 
@@ -71,7 +72,7 @@ public class Data {
     }
 
     // turn object into json string
-    public String toJson(String arg) {
+    public String toJson() {
         HashMap<String, String> map = new HashMap<>();
 
         // player:word
@@ -105,5 +106,11 @@ public class Data {
 
     public boolean disable_button() {
         return this.disable_button;
+    }
+    public boolean is_player1() {
+        return is_player1;
+    }
+    public void set_isplayer1(boolean value) {
+        this.is_player1 = value;
     }
 }
