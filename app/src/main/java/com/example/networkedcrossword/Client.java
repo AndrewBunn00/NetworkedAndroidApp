@@ -14,8 +14,6 @@ public class Client {
     private BufferedWriter writeOut;
     private Data data;
     private Data old_data;
-    boolean flag;
-
 
     public Client(String ip, int port, String message, Data data) {
         this.port = port;
@@ -45,6 +43,7 @@ public class Client {
 //                    data.set_read_client(false);
                     data.set_read(false);
                     data.set_disable_button(false);
+                    data.set_isplayer1(true);
                 }
 //                sendServerMessages(i);
                 if(data.isCan_write()) {
@@ -83,8 +82,7 @@ public class Client {
     private void sendServerMessages(int i) {
         try {
 //            writeOut.write("Hello from client " + data.getData() + "\n");
-            writeOut.write("Hello from client " + i + "\n");
-
+            writeOut.write("Hello from client " + data.getData() + "\n");
             writeOut.flush();
         }
         catch (IOException e) {

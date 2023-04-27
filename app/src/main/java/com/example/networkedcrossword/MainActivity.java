@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private NetworkThread serverThread;
     private NetworkThread clientThread;
     private Data data = new Data();
+    public boolean isPlayer2 = false;
 //    private Handler handler;
 
     @Override
@@ -59,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void submitOnClick(View view) {
-        if(!data.disable_button()) {
+
+        if(!data.disable_button() && data.is_player1()) {
             TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
             String text = textBox.getText().toString();
 
             System.out.println("Send the string over! " + text);
 
-            String msg = data.toJson("key:" + text);
+            String msg = data.toJson();
             data.setData(msg, true);
             data.set_disable_button(true);
         }
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createGame(View view) {
-
+        data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();
         // Check that the code is the right length and alert if not
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void joinGame(View view) {
-
+        data.set_isplayer1(false);
         TextView codeTextBox = findViewById(R.id.code);
 //        output.setText("You touched me");
         String text = codeTextBox.getText().toString();
