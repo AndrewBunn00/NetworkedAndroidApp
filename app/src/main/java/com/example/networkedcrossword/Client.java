@@ -9,6 +9,9 @@ public class Client {
     Socket client;
     private int port;
     private String ip;
+
+    private BufferedReader readIn;
+    private BufferedWriter writeOut;
     private Data data;
     private Data old_data;
     boolean flag;
@@ -28,33 +31,29 @@ public class Client {
         try {
             client = new Socket(ip, port);
             System.out.println("Client connected to " + ip + ":" + port);
-            BufferedReader rdr = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+            readIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            writeOut = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             int i = 0;
 
-            // Read lines from the server
+            // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);
-                String read = "";
-                if(data.can_read()) {
-                    read = rdr.readLine();
-                    System.out.println("[] Client received: " + read + i + "\n");
-                    if (read == null) {
-                        break;
-                    }
-                    data.set_read();
-
-                }else if(data.isCan_write()) {
-                    System.out.println("INSIDE CAN WRITE FLAG CLIENT");
-                    wrtr.write("Hello from client " + read + "\n");
-                    wrtr.flush();
-                    data.setCan_write();
-                } else {
-                    continue;
+                if(data.can_read_client()) {
+                    receiveServerMessages();
+                    data.set_read_client(false);
                 }
+//                sendServerMessages(i);
+                if(data.isCan_write()) {
+                    sendServerMessages(i);
+                    data.setCan_write();
+                    data.set_read_client(true);
+                }
+//                else {
+//                    continue;
+//                }
                 i++;
             }
-            client.close();
+//            client.close();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -68,5 +67,29 @@ public class Client {
 
         return true;
     }
+
+    private void receiveServerMessages() {
+        try {
+            String read = readIn.readLine();
+            System.out.println("[] Client received: " + read + "\n");
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendServerMessages(int i) {
+        try {
+//            writeOut.write("Hello from client " + data.getData() + "\n");
+            writeOut.write("Hello from client " + i + "\n");
+
+            writeOut.flush();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
 

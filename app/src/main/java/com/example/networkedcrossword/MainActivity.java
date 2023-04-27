@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Send the string over! " + text);
 
         String msg = data.toJson("key:" + text);
-        data.setData(msg, true, false);
+        data.setData(msg, true);
 
     }
 

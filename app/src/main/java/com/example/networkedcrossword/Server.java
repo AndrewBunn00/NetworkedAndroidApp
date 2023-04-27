@@ -4,6 +4,8 @@ package com.example.networkedcrossword;
 // import java.io.IOException;
 // import java.net.ServerSocket;
 // import java.net.Socket;
+import static java.lang.Thread.sleep;
+
 import java.io.*;
 import java.net.*;
 
@@ -25,22 +27,34 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();
+            System.out.println("Client connected\n");
             setupReadAndWrite();
+            int i = 0;
 
+            // SEND RECIEVE
             while(true) {
+                sleep(1000);
                 if(data.isCan_write()) {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
-                    sendClientMessages();
+                    sendClientMessages(i);
                     data.setCan_write();
-                } else if(data.can_read()) {
-                    receiveClientMessages();
-                    data.set_read();
-
+                    data.set_read_server(true);
                 }
+//                else {
+//                    continue;
+//                }
+//                sendClientMessages(i);
+                if(data.can_read_server()) {
+                    receiveClientMessages();
+                    data.set_read_server(false);
+                }
+                i++;
             }
 
         }
         catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
@@ -58,9 +72,11 @@ public class Server {
         }
     }
 
-    private void sendClientMessages() {
+    private void sendClientMessages(int i) {
         try {
-            writeOut.write("Hello from server " + data.getData() + "\n");
+//            writeOut.write("Hello from server " + data.getData() + "\n");
+            writeOut.write("Hello from server " + i + "\n");
+
             writeOut.flush();
         }
         catch (IOException e) {
