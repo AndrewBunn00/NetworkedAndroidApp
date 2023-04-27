@@ -34,20 +34,24 @@ public class Client {
             readIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writeOut = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             int i = 0;
+            data.set_read(true);
 
             // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);
-                if(data.can_read_client()) {
+                // if(data.can_read_client())
+                if(data.can_read()) {
                     receiveServerMessages();
-                    data.set_read_client(false);
+//                    data.set_read_client(false);
+                    data.set_read(false);
                     data.set_disable_button(false);
                 }
 //                sendServerMessages(i);
                 if(data.isCan_write()) {
                     sendServerMessages(i);
                     data.setCan_write(false);
-                    data.set_read_client(true);
+//                    data.set_read_client(true);
+                    data.set_read(true);
                 }
                 i++;
             }

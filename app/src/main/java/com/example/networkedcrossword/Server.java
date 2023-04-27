@@ -30,6 +30,7 @@ public class Server {
             System.out.println("Client connected\n");
             setupReadAndWrite();
             int i = 0;
+            data.set_read(false);
 
             // SEND RECIEVE
             while(true) {
@@ -38,11 +39,14 @@ public class Server {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages(i);
                     data.setCan_write(false);
-                    data.set_read_server(true);
+//                    data.set_read_server(true);
+                    data.set_read(true);
                 }
-                if(data.can_read_server()) {
+                // if(data.can_read_server())
+                if(data.can_read()) {
                     receiveClientMessages();
-                    data.set_read_server(false);
+//                    data.set_read_server(false);
+                    data.set_read(false);
                     data.set_disable_button(false);
                 }
                 i++;

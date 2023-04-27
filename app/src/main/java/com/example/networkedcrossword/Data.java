@@ -14,8 +14,6 @@ public class Data {
     private int player2_score = 0;
     private int turn;
     private boolean can_write = false;
-    private boolean can_read_client = true;
-    private boolean can_read_server = false;
     private boolean can_read = false;
     private boolean disable_button = false;
 
@@ -91,22 +89,6 @@ public class Data {
 //        System.out.println("JSON: " + json);
         return json.toString();
 
-    }
-
-    public void set_read_client(boolean value) {
-        this.can_read_client = value;
-    }
-
-    public boolean can_read_client() {
-        return can_read_client;
-    }
-
-    public void set_read_server(boolean value) {
-        this.can_read_server = value;
-    }
-
-    public boolean can_read_server() {
-        return can_read_server;
     }
 
     public void set_read(boolean value) {
