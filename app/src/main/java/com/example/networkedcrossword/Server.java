@@ -37,16 +37,13 @@ public class Server {
                 if(data.isCan_write()) {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages(i);
-                    data.setCan_write();
+                    data.setCan_write(false);
                     data.set_read_server(true);
                 }
-//                else {
-//                    continue;
-//                }
-//                sendClientMessages(i);
                 if(data.can_read_server()) {
                     receiveClientMessages();
                     data.set_read_server(false);
+                    data.set_disable_button(false);
                 }
                 i++;
             }

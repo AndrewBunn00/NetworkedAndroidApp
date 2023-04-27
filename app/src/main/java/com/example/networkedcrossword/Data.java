@@ -16,6 +16,8 @@ public class Data {
     private boolean can_write = false;
     private boolean can_read_client = true;
     private boolean can_read_server = false;
+    private boolean can_read = false;
+    private boolean disable_button = false;
 
     private int total_words;
 
@@ -36,8 +38,8 @@ public class Data {
     public boolean isCan_write() {
         return can_write;
     }
-    public void setCan_write() {
-        this.can_write = !can_write;
+    public void setCan_write(boolean value) {
+        this.can_write = value;
     }
     public boolean setGuess(String guess){
         if(!guess.isEmpty()) {
@@ -105,5 +107,21 @@ public class Data {
 
     public boolean can_read_server() {
         return can_read_server;
+    }
+
+    public void set_read(boolean value) {
+        this.can_read = value;
+    }
+
+    public boolean can_read() {
+        return can_read;
+    }
+
+    public void set_disable_button(boolean value) {
+        this.disable_button = value;
+    }
+
+    public boolean disable_button() {
+        return this.disable_button;
     }
 }

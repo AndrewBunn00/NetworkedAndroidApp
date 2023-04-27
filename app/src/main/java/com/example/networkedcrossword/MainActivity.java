@@ -59,15 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void submitOnClick(View view) {
-
-        TextView textBox = findViewById(R.id.writeAnything);
+        if(!data.disable_button()) {
+            TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
-        String text = textBox.getText().toString();
+            String text = textBox.getText().toString();
 
-        System.out.println("Send the string over! " + text);
+            System.out.println("Send the string over! " + text);
 
-        String msg = data.toJson("key:" + text);
-        data.setData(msg, true);
+            String msg = data.toJson("key:" + text);
+            data.setData(msg, true);
+            data.set_disable_button(true);
+        }
 
     }
 
