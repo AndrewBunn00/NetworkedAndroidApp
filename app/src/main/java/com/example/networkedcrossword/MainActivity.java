@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 //        output.setText("You touched me");
             String text = textBox.getText().toString();
 
+            data.incrementTurn();
+
             System.out.println("Send the string over! " + text);
 
             String msg = data.toJson();

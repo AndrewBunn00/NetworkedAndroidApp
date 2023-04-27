@@ -67,6 +67,7 @@ public class Server {
         try {
             String read = readIn.readLine();
             System.out.println("[] Server received: " + read + "\n");
+            data.setDataOnly(read);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

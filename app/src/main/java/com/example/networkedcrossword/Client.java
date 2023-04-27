@@ -73,6 +73,7 @@ public class Client {
         try {
             String read = readIn.readLine();
             System.out.println("[] Client received: " + read + "\n");
+            data.setDataOnly(read);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

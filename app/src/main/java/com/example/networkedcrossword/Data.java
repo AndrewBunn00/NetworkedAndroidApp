@@ -34,6 +34,11 @@ public class Data {
         this.can_write = write;
     }
 
+    public void setDataOnly(String data) {
+        this.data = data;
+    }
+
+
     public boolean isCan_write() {
         return can_write;
     }
@@ -90,6 +95,10 @@ public class Data {
 //        System.out.println("JSON: " + json);
         return json.toString();
 
+    }
+
+    public void incrementTurn() {
+        this.turn++;
     }
 
     public void set_read(boolean value) {
