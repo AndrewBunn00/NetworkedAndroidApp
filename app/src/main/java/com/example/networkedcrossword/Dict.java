@@ -47,9 +47,15 @@ public class Dict extends AppCompatActivity {
         }
 
         Random rand = new Random();
+        final long start_mSecs = System.currentTimeMillis();
 
         while (this.dict.size() != this.number_of_words) {
             int index=rand.nextInt(file.size());
+            final long curr_mSecs = System.currentTimeMillis();
+            System.out.println(((curr_mSecs - start_mSecs)/1000));
+            if (((curr_mSecs - start_mSecs)/1000) > 3) {
+                break;
+            }
             String[] parts = file.get(index).split(":");
             if (!this.dict.containsKey(parts[0])) {
                 if (parts[0].length() <= word_length) {
@@ -78,9 +84,14 @@ public class Dict extends AppCompatActivity {
     }
 
     private void resize() {
+        final long start_mSecs = System.currentTimeMillis();
         Random rand = new Random();
         while (this.dict.size() != this.number_of_words) {
             //TODO: if loop continues for too long just stop with current #
+            final long curr_mSecs = System.currentTimeMillis();
+            if (((curr_mSecs - start_mSecs)/1000) > 3) {
+                break;
+            }
             int index=rand.nextInt(file.size());
             String[] parts = file.get(index).split(":");
             if (!this.dict.containsKey(parts[0])) {

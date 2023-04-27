@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private Data data = new Data();
     public boolean isPlayer2 = false;
 //    private Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createGame(View view) {
+        Dict dict = new Dict(7, 10, this);
+        try {
+            dict.build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(dict.get_words());
         data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();
