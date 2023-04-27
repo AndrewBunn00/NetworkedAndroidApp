@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
 
     private NetworkThread serverThread;
     private NetworkThread clientThread;
+    private Data data = new Data();
+    public boolean isPlayer2 = false;
 //    private Handler handler;
 
     @Override
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new Thread(updateTextWithTime).start();
+//        new Thread(updateTextWithTime).start();
 
     }
 
@@ -59,16 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void submitOnClick(View view) {
 
-        TextView textBox = findViewById(R.id.writeAnything);
+        if(!data.disable_button() && data.is_player1()) {
+            TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
-        String text = textBox.getText().toString();
+            String text = textBox.getText().toString();
 
-        System.out.println("Send the string over! " + text);
+            System.out.println("Send the string over! " + text);
+
+            String msg = data.toJson();
+            data.setData(msg, true);
+            data.set_disable_button(true);
+        }
+
     }
 
 
     public void createGame(View view) {
-
+        data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();
         // Check that the code is the right length and alert if not
@@ -89,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber);
+        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
         serverThread.start();
 
     }
@@ -97,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void joinGame(View view) {
-
+        data.set_isplayer1(false);
         TextView codeTextBox = findViewById(R.id.code);
 //        output.setText("You touched me");
         String text = codeTextBox.getText().toString();
@@ -118,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber);
+        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
         clientThread.start();
 
     }

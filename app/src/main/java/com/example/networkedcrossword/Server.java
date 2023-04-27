@@ -4,6 +4,8 @@ package com.example.networkedcrossword;
 // import java.io.IOException;
 // import java.net.ServerSocket;
 // import java.net.Socket;
+import static java.lang.Thread.sleep;
+
 import java.io.*;
 import java.net.*;
 
@@ -13,8 +15,10 @@ public class Server {
     Socket clientSocket;
     private BufferedReader readIn;
     private BufferedWriter writeOut;
-    public Server(int port) {
+    private Data data;
+    public Server(int port, Data data) {
         this.port = port;
+        this.data = data;
     }
 
     public void serverStart() {
@@ -23,15 +27,35 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();
+            System.out.println("Client connected\n");
             setupReadAndWrite();
+            int i = 0;
+            data.set_read(false);
 
+            // SEND RECIEVE
             while(true) {
-                sendClientMessages();
-                receiveClientMessages();
+                sleep(1000);
+                if(data.isCan_write()) {
+                    System.out.println("INSIDE CAN WRITE FLAG SERVER");
+                    sendClientMessages(i);
+                    data.setCan_write(false);
+//                    data.set_read_server(true);
+                    data.set_read(true);
+                }
+                // if(data.can_read_server())
+                if(data.can_read()) {
+                    receiveClientMessages();
+//                    data.set_read_server(false);
+                    data.set_read(false);
+                    data.set_disable_button(false);
+                }
+                i++;
             }
 
         }
         catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
@@ -49,9 +73,9 @@ public class Server {
         }
     }
 
-    private void sendClientMessages() {
+    private void sendClientMessages(int i) {
         try {
-            writeOut.write("Hello from server\n");
+            writeOut.write("Hello from server " + data.getData() + "\n");
             writeOut.flush();
         }
         catch (IOException e) {
