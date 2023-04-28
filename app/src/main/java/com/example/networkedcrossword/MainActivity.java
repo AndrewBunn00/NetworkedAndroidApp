@@ -152,6 +152,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGameButton(View view) {
         System.out.println("ENTERING GAME WINDOW");
+//        try {
+//            sleep(2000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("data", data);
 
