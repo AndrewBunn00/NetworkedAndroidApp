@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -73,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
 //        output.setText("You touched me");
             String text = textBox.getText().toString();
 
+            // update with the recieved data
+//            HashMap<String, String> map = data.cleanUpDataString();
+//            data.updateData(map);
+
+            // update the game
             data.incrementTurn();
 
             System.out.println("Send the string over! " + text);
 
+            // prep the data for sending
             String msg = data.toJson();
             data.setData(msg, true);
             data.set_disable_button(true);

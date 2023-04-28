@@ -13,7 +13,7 @@ public class Data implements Serializable {
     private String player2_guess = new String();
     private int player1_score = 0;
     private int player2_score = 0;
-    private int turn;
+    private int turn = 0;
     private boolean can_write = false;
     private boolean can_read = false;
     private boolean disable_button = false;
@@ -37,8 +37,14 @@ public class Data implements Serializable {
         this.can_write = write;
     }
 
-    public void setDataOnly(String data) {
-        this.data = data;
+    public void setDataOnly(String theData) {
+        // Get the new data out and ready to be used
+        HashMap<String, String> map = this.cleanUpDataString(theData);
+
+        // Update the data
+        this.updateData(map);
+
+//        this.data = data;
     }
 
 
@@ -97,6 +103,49 @@ public class Data implements Serializable {
         JSONObject json = new JSONObject(map);
 //        System.out.println("JSON: " + json);
         return json.toString();
+
+    }
+
+
+    /**
+     * clean up data string and return a map of all the values
+     * @return
+     */
+    public HashMap<String, String> cleanUpDataString(String theData) {
+        String[] partialSplit = theData.split(",");
+        String[] values;
+        HashMap<String, String> map = new HashMap<>();
+
+
+        for(String s : partialSplit) {
+            values = s.split(":");
+            if(values[0].contains("{")) {
+                values[0] = values[0].replace("{", "");
+            }
+            if(values[1].contains("}")) {
+                values[1] = values[1].replace("}", "");
+            }
+            values[0] = values[0].replace("\"", "");
+            values[1] = values[1].replace("\"", "");
+
+            map.put(values[0], values[1]);
+            System.out.println(values[0] + " " + values[1]);
+        }
+        return map;
+    }
+
+    /**
+     * update data from json string
+     * @param map
+     */
+    public void updateData(HashMap<String, String> map) {
+        this.player1_guess = map.get("player1_guess");
+        this.player2_guess = map.get("player2_guess");
+        this.player1_score = Integer.parseInt(map.get("player1_score"));
+        this.player2_score = Integer.parseInt(map.get("player2_score"));
+        this.turn = Integer.parseInt(map.get("turn"));
+        this.total_words = Integer.parseInt(map.get("total_words"));
+
 
     }
 
