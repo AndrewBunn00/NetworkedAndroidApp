@@ -46,6 +46,13 @@ public class Game extends AppCompatActivity {
         }
 
         if(this.seed == 3) {
+            this.boardSeed = new String[row][col];
+            this.boardSeed[0] = new String[]{"1", "2", "-", "-", "5", "6"};
+            this.boardSeed[1] = new String[]{"7", "-", "-", "-", "-", "-"};
+            this.boardSeed[2] = new String[]{"8", "-", "-", "-", "-", "-"};
+            this.boardSeed[3] = new String[]{"9", "-", "-", "-", "-", "-"};
+            this.boardSeed[4] = new String[]{"*", "10", "-", "-", "-", "*"};
+            this.boardSeed[5] = new String[]{"*", "11", "-", "-", "-", "*"};
 
         }
 
