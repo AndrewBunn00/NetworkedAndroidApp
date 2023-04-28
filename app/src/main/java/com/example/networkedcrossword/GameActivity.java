@@ -77,10 +77,13 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
+        // make the crossword view
         crosswordBoard = new CrosswordBoard(this);
         crosswordBoard.setAttributes(game.isServer ? 1 : 2, game);
 //        setContentView(crosswordBoard);
 
+
+        // remove views from the activity and add to the layout
         LinearLayout layout = findViewById(R.id.linLayout);
         ((ViewGroup)layout.getParent()).removeView(layout);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
@@ -88,6 +91,8 @@ public class GameActivity extends AppCompatActivity {
         layout.addView(promptView);
         layout.addView(crosswordBoard);
         setContentView(layout);
+
+        crosswordBoard.setY(-(windowHeight/8));
 
     }
 
