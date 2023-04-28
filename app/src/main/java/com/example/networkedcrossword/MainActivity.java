@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private NetworkThread clientThread;
     private Data data = new Data();
     private int seed = 1;
-//    private int seed = (int) (Math.random() * 4) + 1;
+//    private int seed = (int) (Math.random() * 2) + 1;
     public boolean isPlayer2 = false;
 //    private Handler handler;
     @Override
