@@ -39,7 +39,9 @@ public class Game extends AppCompatActivity {
             this.boardSeed[2] = new String[]{"-", "*", "*", "*", "*", "*", "*", "*"};
             this.boardSeed[3] = new String[]{"11", "-", "-", "-", "-", "-", "-", "*"};
             this.boardSeed[4] = new String[]{"*", "*", "*", "12", "-", "-", "*", "*"};
-            this.boardSeed[5] = new String[]{""};
+            this.boardSeed[5] = new String[]{"*", "14", "15", "*", "*", "*", "16", "17"};
+            this.boardSeed[6] = new String[]{"18", "-", "-", "*", "*", "*", "-", "-"};
+            this.boardSeed[7] = new String[]{"20", "-", "-", "*", "21", "-", "-", "-"};
         }
         if(this.seed ==2) {
 
@@ -59,7 +61,7 @@ public class Game extends AppCompatActivity {
         return this.boardSeed;
     }
     public void handleBoardStateUpdate(char[][] board){
-
+        System.out.println(this.boardSeed);
     }
 
     public void handlePlayerTurn(String word) {
