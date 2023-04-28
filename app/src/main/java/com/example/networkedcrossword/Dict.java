@@ -33,6 +33,12 @@ public class Dict extends AppCompatActivity {
                 case 1:
                     is = context.getResources().openRawResource(R.raw.board1);
                     break;
+                case 2:
+                    is = context.getResources().openRawResource(R.raw.board2);
+                    break;
+                case 3:
+                    is = context.getResources().openRawResource(R.raw.board3);
+                    break;
             }
             reader = new BufferedReader(new InputStreamReader(is));
             String read;
