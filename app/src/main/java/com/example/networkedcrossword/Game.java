@@ -44,7 +44,14 @@ public class Game extends AppCompatActivity {
             this.boardSeed[7] = new String[]{"20", "-", "-", "*", "21", "-", "-", "-"};
         }
         if(this.seed ==2) {
-
+            this.boardSeed = new String[row][col];
+            this.boardSeed[0] = new String[]{"1", "-", "-", "4", "-", "6", "*"};
+            this.boardSeed[1] = new String[]{"-", "*", "*", "-", "*", "-", "8"};
+            this.boardSeed[2] = new String[]{"-", "*", "*", "-", "*", "-", "-"};
+            this.boardSeed[3] = new String[]{"10", "-", "-", "*", "11", "-", "-"};
+            this.boardSeed[4] = new String[]{"-", "*", "*", "13", "*", "-", "-"};
+            this.boardSeed[5] = new String[]{"14", "-", "-", "-", "-", "-", "*"};
+            this.boardSeed[6] = new String[]{"*", "15", "-", "-", "-", "*", "*"};
         }
 
         if(this.seed == 3) {
