@@ -92,7 +92,13 @@ public class GameActivity extends AppCompatActivity {
         layout.addView(crosswordBoard);
         setContentView(layout);
 
+        ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+        layoutParams.height = windowHeight;
+        layoutParams.width = windowWidth;
+        layout.setLayoutParams(layoutParams);
+
         crosswordBoard.setY(-(windowHeight/8));
+//        promptView.setY(windowHeight - windowHeight/3);
 
     }
 
