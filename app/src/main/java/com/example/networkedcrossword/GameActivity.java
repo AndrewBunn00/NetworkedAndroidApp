@@ -3,22 +3,19 @@ package com.example.networkedcrossword;
 import static java.lang.Math.min;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowInsetsCompat;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.view.View;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -79,19 +76,18 @@ public class GameActivity extends AppCompatActivity {
             whoAmIText.setText("Player 2");
         }
 
+
         crosswordBoard = new CrosswordBoard(this);
         crosswordBoard.setAttributes(game.isServer ? 1 : 2, game);
-        setContentView(crosswordBoard);
+//        setContentView(crosswordBoard);
 
-//        layout.removeAllViews();
-//        layout.addView(crosswordBoard);
-//        layout.addView(promptView);
-//        setContentView(layout);
+        LinearLayout layout = findViewById(R.id.linLayout);
+        ((ViewGroup)layout.getParent()).removeView(layout);
+        ((ViewGroup)promptView.getParent()).removeView(promptView);
 
-
-//        promptView.bringToFront();
-//        promptView.requestLayout();
-//        promptView.invalidate();
+        layout.addView(promptView);
+        layout.addView(crosswordBoard);
+        setContentView(layout);
 
     }
 
