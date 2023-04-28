@@ -1,0 +1,10 @@
+1:A:LAVASH:Flour water salt bread baked in a tandoor
+10:A:SIG:john hancock for short
+13:D:TEE:shirt named for its shape
+8:D:TEST:Vet maybe
+4:D:ATF:DOJ divison
+11:A:MGS:Booker Ts backers
+15:A:TRES:3 in spanish
+14:A:SHEENY:Lustrous
+6:D:HANGRY:Lashing out due to hunger
+1:D:LAPSES:Minor slips
