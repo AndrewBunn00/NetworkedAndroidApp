@@ -10,11 +10,13 @@ import java.util.ArrayList;
 
 public class Game implements Serializable {
     private int dim;
-    private int seed;
+    public int seed;
     private int row;
     private int col;
     private Dict dict;
     private String[][] boardSeed;
+
+    private String[][] board;
 
     public boolean isServer = false;
 

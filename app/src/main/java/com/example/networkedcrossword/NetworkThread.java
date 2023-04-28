@@ -10,20 +10,20 @@ public class NetworkThread extends Thread {
     private String ip;
     private int port;
     private Data data;
-    private Context ctx;
+    public Client client;
 
     public Game clientGame;
     public Game serverGame;
 
+
     // Constructor
     public NetworkThread(String serverOrClient, String message, String ip,
-                         int port, Data data, Context ctx) {
+                         int port, Data data) {
         this.serverOrClient = serverOrClient;
         this.message = message;
         this.ip = ip;
         this.port = port;
         this.data = data;
-        this.ctx = ctx;
     }
 
     @Override
@@ -58,14 +58,17 @@ public class NetworkThread extends Thread {
             server.serverStart();
         }
         else if(Objects.equals(serverOrClient, "Client")) {
-            Client client = new Client(ip, port, message, data);
+            this.client = new Client(ip, port, message, data);
+
             client.clientStart();
-            this.clientGame = client.game;
         }
         else {
             System.out.println("Need to give string \"Server\" or \"Client\"");
             return;
         }
 
+    }
+    public Game assignGame(Client client) {
+        return client.clientGame();
     }
 }

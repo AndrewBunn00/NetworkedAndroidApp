@@ -17,10 +17,10 @@ public class GameActivity extends AppCompatActivity {
 
         TextView whoAmIText = findViewById(R.id.whoAmIText);
         if(game.isServer) {
-            whoAmIText.setText("Server");
+            whoAmIText.setText("Server"+" "+game.seed);
         }
         else {
-            whoAmIText.setText("Client");
+            whoAmIText.setText("Client"+" "+game.seed);
         }
 
     }

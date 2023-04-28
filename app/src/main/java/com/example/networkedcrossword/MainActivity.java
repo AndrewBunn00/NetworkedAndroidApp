@@ -19,9 +19,10 @@ public class MainActivity extends AppCompatActivity {
     private NetworkThread serverThread;
     private NetworkThread clientThread;
     private Data data = new Data();
-    private int seed = 1;
+//    private int seed = 1;
     private int dim = 8;
-//    private int seed = (int) (Math.random() * 4) + 1;
+    private Game clientMain;
+    private int seed = (int) (Math.random() * 4) + 1;
     public boolean isPlayer2 = false;
 //    private Handler handler;
     @Override
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data, this);
+        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
         serverThread.start();
 
     }
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check that the code is the right length and alert if not
         if(text.length() != 4) {
-            Toast.makeText(this, "Port Numbermust be length 4 and Match server port", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Port Number must be length 4 and Match server port", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -141,8 +142,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data, this);
+        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
         clientThread.start();
+
+
         // create game state client, give it board and context
 
     }
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
 
         if(this.clientThread != null) {
-            intent.putExtra("game", this.clientThread.clientGame);
+            intent.putExtra("game", this.clientThread.assignGame(this.clientThread.client));
         }
         else if(this.serverThread != null) {
             intent.putExtra("game", this.serverThread.serverGame);
