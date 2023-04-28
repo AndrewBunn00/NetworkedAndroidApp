@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
 
         if(this.clientThread != null) {
-            intent.putExtra("game", this.clientThread.assignGame(this.clientThread.client));
+            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
         }
         else if(this.serverThread != null) {
             intent.putExtra("game", this.serverThread.serverGame);

@@ -68,7 +68,7 @@ public class NetworkThread extends Thread {
         }
 
     }
-    public Game assignGame(Client client) {
+    public Game assignClientGame(Client client) {
         return client.clientGame();
     }
 }
