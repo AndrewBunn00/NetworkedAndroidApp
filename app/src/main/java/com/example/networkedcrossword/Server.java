@@ -18,17 +18,20 @@ public class Server {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
-    private Context ctx;
+    private Game game;
 
-    public Server(int port, Data data, Context ctx) {
+    public Server(int port, Data data) {
         this.port = port;
         this.data = data;
-        this.ctx = ctx;
+        String[] split = data.getBoardStats().split(",");
+        int dim = Integer.parseInt(split[0]);
+        int seed = Integer.parseInt(split[1]);
+        this.game = new Game(dim, seed);
     }
 
     public void serverStart() {
         System.out.println("Starting server\n");
-
+        this.game.handleBoardStateUpdate();
         try {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();
