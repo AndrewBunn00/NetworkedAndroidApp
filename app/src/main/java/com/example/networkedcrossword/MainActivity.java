@@ -16,21 +16,15 @@ public class MainActivity extends AppCompatActivity {
     private NetworkThread serverThread;
     private NetworkThread clientThread;
     private Data data = new Data();
+    private int seed = 1;
+//    private int seed = (int) (Math.random() * 4) + 1;
     public boolean isPlayer2 = false;
 //    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Dict dict = new Dict(1,this);
-        ArrayList<ArrayList<String>> list;
-        try {
-            list = dict.build(); //2d arraylist
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 //        new Thread(updateTextWithTime).start();
-
     }
 
     // TODO: Clean up if interrupted
