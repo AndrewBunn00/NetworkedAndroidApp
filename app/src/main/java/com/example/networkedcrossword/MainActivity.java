@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +22,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Dict dict = new Dict(1,this);
+        ArrayList<ArrayList<String>> list;
+        try {
+            list = dict.build(); //2d arraylist
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 //        new Thread(updateTextWithTime).start();
 
     }
@@ -80,13 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createGame(View view) {
-        Dict dict = new Dict(7, 10, this);
-        try {
-            dict.build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(dict.get_words());
+
+//        System.out.println(dict.get_words());
         data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();

@@ -9,36 +9,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.Set;
 
 public class Dict extends AppCompatActivity {
-    private int number_of_words;
-    private int word_length;
     private Context context;
-    private HashMap<String,String> dict;
+    private ArrayList<ArrayList<String>> boards;
     ArrayList<String> file = null;
-
-    public Dict(int length, int amount, Context cxt){
-        this.word_length = length;
+    private int seed;
+    public Dict(int seed,Context cxt){
         this.context = cxt;
-        this.dict = new HashMap<String, String>();
-        this.number_of_words = amount;
+        this.boards = new ArrayList<>(10);
+        this.seed = seed;
     }
 
-    public void build() throws IOException {
+    public ArrayList<ArrayList<String>> build() throws IOException {
+        for (int i = 0; i < 10; i++) {
+            boards.add(new ArrayList<>());
+        }
         InputStream is = null;
         BufferedReader reader = null;
         try {
-            is = context.getResources().openRawResource(R.raw.words);
+            switch (seed) {
+                case 1:
+                    is = context.getResources().openRawResource(R.raw.board1);
+                    break;
+            }
             reader = new BufferedReader(new InputStreamReader(is));
             String read;
             file = new ArrayList<String>();
-            while ((read=reader.readLine()) != null) {
+            while ((read = reader.readLine()) != null) {
                 file.add(read);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             System.out.println("[HERE]" + is);
@@ -48,60 +50,19 @@ public class Dict extends AppCompatActivity {
 
         Random rand = new Random();
         final long start_mSecs = System.currentTimeMillis();
-
-        while (this.dict.size() != this.number_of_words) {
-            int index=rand.nextInt(file.size());
-            final long curr_mSecs = System.currentTimeMillis();
-            System.out.println(((curr_mSecs - start_mSecs)/1000));
-            if (((curr_mSecs - start_mSecs)/1000) > 3) {
-                break;
+        /*
+        1:A:Belowdeck:Television show about a service staff on a yacht
+        [1, A, Belowdeck, Television show about a service staff on a yacht]
+         */
+        int count = 0;
+        for (String line : file) {
+            String[] parts = line.split(":");
+            for (int i = 0; i < parts.length; i++) {
+                boards.get(count).add(parts[i]);
             }
-            String[] parts = file.get(index).split(":");
-            if (!this.dict.containsKey(parts[0])) {
-                if (parts[0].length() <= word_length) {
-                    this.dict.put(parts[0], parts[1]);
-                }
-            }
+            count++;
         }
-        System.out.println(this.dict.size());
-        System.out.println("[KEYSET2]"+this.dict.keySet());
+        System.out.println(boards);
+        return boards;
     }
-    public Set get_words() {
-        return this.dict.keySet();
-    }
-
-    public HashMap get_dict() {
-        return this.dict;
-    }
-
-    public String get_hint(String word) {
-        return this.dict.get(word);
-    }
-
-    public void setNumber_of_words(Integer num) {
-        this.number_of_words = num;
-        this.resize();
-    }
-
-    private void resize() {
-        final long start_mSecs = System.currentTimeMillis();
-        Random rand = new Random();
-        while (this.dict.size() != this.number_of_words) {
-            //TODO: if loop continues for too long just stop with current #
-            final long curr_mSecs = System.currentTimeMillis();
-            if (((curr_mSecs - start_mSecs)/1000) > 3) {
-                break;
-            }
-            int index=rand.nextInt(file.size());
-            String[] parts = file.get(index).split(":");
-            if (!this.dict.containsKey(parts[0])) {
-                if (parts[0].length() <= word_length) {
-                    this.dict.put(parts[0], parts[1]);
-                }
-            }
-        }
-
-    }
-
-
 }
