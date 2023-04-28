@@ -2,9 +2,10 @@ package com.example.networkedcrossword;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Data {
+public class Data implements Serializable {
     // variables
     private String data = new String();
     private String[] params = new String[]{"player1_guess", "player2_guess", "player1_score", "player2_score", "turn", "total_words"};
@@ -20,7 +21,7 @@ public class Data {
 
     private String boardStats = "";
 
-    private int total_words;
+    private int total_words = 0;
 
     // constructor
     public Data() {

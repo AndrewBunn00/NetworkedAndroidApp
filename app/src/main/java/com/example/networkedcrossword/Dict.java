@@ -8,10 +8,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Dict {
+public class Dict implements Serializable {
     private ArrayList<ArrayList<String>> boards;
     ArrayList<String> file = null;
     private int seed;

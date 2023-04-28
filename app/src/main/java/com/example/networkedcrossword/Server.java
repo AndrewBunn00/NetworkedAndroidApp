@@ -18,7 +18,7 @@ public class Server {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
-    private Game game;
+    public Game game;
 
     public Server(int port, Data data) {
         this.port = port;
@@ -27,6 +27,7 @@ public class Server {
         int dim = Integer.parseInt(split[0]);
         int seed = Integer.parseInt(split[1]);
         this.game = new Game(dim, seed);
+        this.game.isServer = true;
     }
 
     public void serverStart() {

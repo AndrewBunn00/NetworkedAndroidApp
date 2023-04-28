@@ -12,6 +12,9 @@ public class NetworkThread extends Thread {
     private Data data;
     private Context ctx;
 
+    public Game clientGame;
+    public Game serverGame;
+
     // Constructor
     public NetworkThread(String serverOrClient, String message, String ip,
                          int port, Data data, Context ctx) {
@@ -51,11 +54,13 @@ public class NetworkThread extends Thread {
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
             Server server = new Server(port, data);
+            this.serverGame = server.game;
             server.serverStart();
         }
         else if(Objects.equals(serverOrClient, "Client")) {
             Client client = new Client(ip, port, message, data);
             client.clientStart();
+            this.clientGame = client.game;
         }
         else {
             System.out.println("Need to give string \"Server\" or \"Client\"");

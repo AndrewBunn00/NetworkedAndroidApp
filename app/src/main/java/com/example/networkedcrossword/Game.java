@@ -5,15 +5,19 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements Serializable {
     private int dim;
     private int seed;
     private int row;
     private int col;
     private Dict dict;
     private String[][] boardSeed;
+
+    public boolean isServer = false;
+
     public Game(int dim, int seed){
         this.seed = seed;
         this.row = dim;

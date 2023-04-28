@@ -2,6 +2,8 @@ package com.example.networkedcrossword;
 
 import static java.lang.Thread.sleep;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -147,7 +149,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGameButton(View view) {
         System.out.println("ENTERING GAME WINDOW");
-        startActivity(new android.content.Intent(this, GameActivity.class));
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("data", data);
+
+//        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
+
+        if(this.clientThread != null) {
+            intent.putExtra("game", this.clientThread.clientGame);
+        }
+        else if(this.serverThread != null) {
+            intent.putExtra("game", this.serverThread.serverGame);
+        }
+
+
+        startActivity(intent);
     }
 
 

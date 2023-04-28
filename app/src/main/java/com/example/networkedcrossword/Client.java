@@ -17,7 +17,7 @@ public class Client {
     private Data data;
     private Data old_data;
 
-    private Game game;
+    public Game game;
 
     public Client(String ip, int port, String message, Data data) {
         this.port = port;
