@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.ArrayList;
 
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private NetworkThread clientThread;
     private Data data = new Data();
     private int seed = 1;
+    private int dim = 8;
 //    private int seed = (int) (Math.random() * 4) + 1;
     public boolean isPlayer2 = false;
 //    private Handler handler;
@@ -78,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+// row/col num : a indicates across, d down :
+    // needs row col and seedNum for a game obj
 
     public void createGame(View view) {
 
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();
+
         // Check that the code is the right length and alert if not
         if(text.length() != 4) {
             Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
@@ -93,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         System.out.println("Starting a server, on port number: " + text);
+
+//        Random rand = new Random();
+//        String boardStats = "8";
+//        boardStats +=
+        String boardStats = Integer.toString(dim) + "," + Integer.toString(seed);
+        data.setBoardStats(boardStats);
 
         // TODO: call server code here
         // create server
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             portNumber = 1880;
         }
 
-        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
+        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data, this);
         serverThread.start();
 
     }
@@ -133,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
+        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data, this);
         clientThread.start();
+        // create game state client, give it board and context
 
     }
 

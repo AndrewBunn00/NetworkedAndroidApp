@@ -5,6 +5,8 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
+import android.content.Context;
+
 public class Client {
     Socket client;
     private int port;
@@ -14,11 +16,13 @@ public class Client {
     private BufferedWriter writeOut;
     private Data data;
     private Data old_data;
+    private Context ctx;
 
-    public Client(String ip, int port, String message, Data data) {
+    public Client(String ip, int port, String message, Data data, Context ctx) {
         this.port = port;
         this.ip = ip;
         this.data = data;
+        this.ctx = ctx;
 
         System.out.println("Client created on " + ip + ":" + port + " with message " + message);
     }
@@ -33,6 +37,11 @@ public class Client {
             writeOut = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             int i = 0;
             data.set_read(true);
+
+            // read the boardstats from the server FIRST READ ONLY
+            String boardStats = readIn.readLine();
+            data.setBoardStats(boardStats);
+//            System.out.println("BOOOOOOARD STATS: " + boardStats);
 
             // Read lines from the server RECIEVE SEND
             while (true) {
