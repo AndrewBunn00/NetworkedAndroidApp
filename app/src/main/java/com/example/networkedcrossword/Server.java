@@ -6,6 +6,8 @@ package com.example.networkedcrossword;
 // import java.net.Socket;
 import static java.lang.Thread.sleep;
 
+import android.content.Context;
+
 import java.io.*;
 import java.net.*;
 
@@ -16,9 +18,12 @@ public class Server {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
-    public Server(int port, Data data) {
+    private Context ctx;
+
+    public Server(int port, Data data, Context ctx) {
         this.port = port;
         this.data = data;
+        this.ctx = ctx;
     }
 
     public void serverStart() {
@@ -31,6 +36,11 @@ public class Server {
             setupReadAndWrite();
             int i = 0;
             data.set_read(false);
+
+            // write the board stats over FIRST WRITE ONLY
+            String boardStats = data.getBoardStats();
+            writeOut.write(boardStats + "\n");
+            writeOut.flush();
 
             // SEND RECIEVE
             while(true) {

@@ -18,6 +18,8 @@ public class Data {
     private boolean disable_button = false;
     private boolean is_player1 = false;
 
+    private String boardStats = "";
+
     private int total_words;
 
     // constructor
@@ -121,5 +123,13 @@ public class Data {
     }
     public void set_isplayer1(boolean value) {
         this.is_player1 = value;
+    }
+
+    public void setBoardStats(String stats) {
+        this.boardStats = stats;
+    }
+
+    public String getBoardStats() {
+        return this.boardStats;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.networkedcrossword;
 
+import android.content.Context;
+
 import java.util.Objects;
 
 public class NetworkThread extends Thread {
@@ -8,14 +10,17 @@ public class NetworkThread extends Thread {
     private String ip;
     private int port;
     private Data data;
+    private Context ctx;
 
     // Constructor
-    public NetworkThread(String serverOrClient, String message, String ip, int port, Data data) {
+    public NetworkThread(String serverOrClient, String message, String ip,
+                         int port, Data data, Context ctx) {
         this.serverOrClient = serverOrClient;
         this.message = message;
         this.ip = ip;
         this.port = port;
         this.data = data;
+        this.ctx = ctx;
     }
 
     @Override
@@ -45,11 +50,11 @@ public class NetworkThread extends Thread {
 
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
-            Server server = new Server(port, data);
+            Server server = new Server(port, data, ctx);
             server.serverStart();
         }
         else if(Objects.equals(serverOrClient, "Client")) {
-            Client client = new Client(ip, port, message, data);
+            Client client = new Client(ip, port, message, data, ctx);
             client.clientStart();
         }
         else {
