@@ -39,7 +39,9 @@ public class Game extends AppCompatActivity {
             this.boardSeed[2] = new String[]{"-", "*", "*", "*", "*", "*", "*", "*"};
             this.boardSeed[3] = new String[]{"11", "-", "-", "-", "-", "-", "-", "*"};
             this.boardSeed[4] = new String[]{"*", "*", "*", "12", "-", "-", "*", "*"};
-            this.boardSeed[5] = new String[]{""};
+            this.boardSeed[5] = new String[]{"*", "14", "15", "*", "*", "*", "16", "17"};
+            this.boardSeed[6] = new String[]{"18", "-", "-", "*", "*", "*", "-", "-"};
+            this.boardSeed[7] = new String[]{"20", "-", "-", "*", "21", "-", "-", "-"};
         }
         if(this.seed ==2) {
             this.boardSeed = new String[row][col];
@@ -53,13 +55,20 @@ public class Game extends AppCompatActivity {
         }
 
         if(this.seed == 3) {
+            this.boardSeed = new String[row][col];
+            this.boardSeed[0] = new String[]{"1", "2", "-", "-", "5", "6"};
+            this.boardSeed[1] = new String[]{"7", "-", "-", "-", "-", "-"};
+            this.boardSeed[2] = new String[]{"8", "-", "-", "-", "-", "-"};
+            this.boardSeed[3] = new String[]{"9", "-", "-", "-", "-", "-"};
+            this.boardSeed[4] = new String[]{"*", "10", "-", "-", "-", "*"};
+            this.boardSeed[5] = new String[]{"*", "11", "-", "-", "-", "*"};
 
         }
 
         return this.boardSeed;
     }
     public void handleBoardStateUpdate(char[][] board){
-
+        System.out.println(this.boardSeed);
     }
 
     public void handlePlayerTurn(String word) {
