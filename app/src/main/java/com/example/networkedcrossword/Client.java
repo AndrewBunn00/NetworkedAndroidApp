@@ -26,6 +26,8 @@ public class Client {
         System.out.println("Client created on " + ip + ":" + port + " with message " + message);
     }
 
+    public Game clientGame() {return this.game;}
+
     public void clientStart() {
         System.out.println("Starting client\n");
 
@@ -44,6 +46,7 @@ public class Client {
             int dim = Integer.parseInt(split[0]);
             int seed = Integer.parseInt(split[1]);
             this.game = new Game(dim, seed);
+            System.out.println("Stuff" + game.isServer);
 //            System.out.println("BOOOOOOARD STATS: " + boardStats);
             // Read lines from the server RECIEVE SEND
             while (true) {
