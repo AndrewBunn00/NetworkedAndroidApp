@@ -14,6 +14,7 @@ public class Game extends AppCompatActivity {
     private int row;
     private int col;
     private Dict dict;
+    private String[][] boardSeed;
     public Game(int dim, int seed, Context cxt){
         this.context = cxt;
         this.seed = seed;
@@ -29,6 +30,26 @@ public class Game extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         return list;
+    }
+    private String[][] generateStructure() {
+        if(this.seed == 1) {
+            this.boardSeed = new String[row][col];
+            this.boardSeed[0] = new String[]{"1", "*", "*", "*", "*", "*", "*", "*"};
+            this.boardSeed[1] = new String[]{"-", "*", "*", "*", "*", "*", "*", "*"};
+            this.boardSeed[2] = new String[]{"-", "*", "*", "*", "*", "*", "*", "*"};
+            this.boardSeed[3] = new String[]{"11", "-", "-", "-", "-", "-", "-", "*"};
+            this.boardSeed[4] = new String[]{"*", "*", "*", "12", "-", "-", "*", "*"};
+            this.boardSeed[5] = new String[]{""};
+        }
+        if(this.seed ==2) {
+
+        }
+
+        if(this.seed == 3) {
+
+        }
+
+        return this.boardSeed;
     }
     public void handleBoardStateUpdate(char[][] board){
 
