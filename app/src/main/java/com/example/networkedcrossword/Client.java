@@ -16,14 +16,13 @@ public class Client {
     private BufferedWriter writeOut;
     private Data data;
     private Data old_data;
-    private Context ctx;
 
-    public Client(String ip, int port, String message, Data data, Context ctx) {
+    private Game game;
+
+    public Client(String ip, int port, String message, Data data) {
         this.port = port;
         this.ip = ip;
         this.data = data;
-        this.ctx = ctx;
-
         System.out.println("Client created on " + ip + ":" + port + " with message " + message);
     }
 
@@ -41,8 +40,11 @@ public class Client {
             // read the boardstats from the server FIRST READ ONLY
             String boardStats = readIn.readLine();
             data.setBoardStats(boardStats);
+            String[] split = data.getBoardStats().split(",");
+            int dim = Integer.parseInt(split[0]);
+            int seed = Integer.parseInt(split[1]);
+            this.game = new Game(dim, seed);
 //            System.out.println("BOOOOOOARD STATS: " + boardStats);
-
             // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);

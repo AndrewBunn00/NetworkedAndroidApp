@@ -84,12 +84,14 @@ public class MainActivity extends AppCompatActivity {
     // needs row col and seedNum for a game obj
 
     public void createGame(View view) {
-
-//        System.out.println(dict.get_words());
         data.set_isplayer1(true);
         TextView codeTextBox = findViewById(R.id.code);
         String text = codeTextBox.getText().toString();
-
+        StringBuilder str = new StringBuilder();
+        str.append(dim);
+        str.append(",");
+        str.append(seed);
+        data.setBoardStats(str.toString());
         // Check that the code is the right length and alert if not
         if(text.length() != 4) {
             Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
@@ -97,12 +99,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         System.out.println("Starting a server, on port number: " + text);
-
-//        Random rand = new Random();
-//        String boardStats = "8";
-//        boardStats +=
-        String boardStats = Integer.toString(dim) + "," + Integer.toString(seed);
-        data.setBoardStats(boardStats);
 
         // TODO: call server code here
         // create server

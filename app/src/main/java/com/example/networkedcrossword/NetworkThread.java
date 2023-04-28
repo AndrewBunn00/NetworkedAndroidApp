@@ -50,11 +50,11 @@ public class NetworkThread extends Thread {
 
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
-            Server server = new Server(port, data, ctx);
+            Server server = new Server(port, data);
             server.serverStart();
         }
         else if(Objects.equals(serverOrClient, "Client")) {
-            Client client = new Client(ip, port, message, data, ctx);
+            Client client = new Client(ip, port, message, data);
             client.clientStart();
         }
         else {
