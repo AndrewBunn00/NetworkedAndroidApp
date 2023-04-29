@@ -15,7 +15,7 @@ public class Client {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
-    private Data old_data;
+    private Data dataServerOrClient;
 
     public Game game;
 
@@ -54,6 +54,7 @@ public class Client {
                 // if(data.can_read_client())
                 if(data.can_read()) {
                     receiveServerMessages();
+                    System.out.println("CLIENT REC SERVER MSG");
 //                    data.set_read_client(false);
                     data.set_read(false);
                     data.set_disable_button(false);
@@ -62,6 +63,7 @@ public class Client {
 //                sendServerMessages(i);
                 if(data.isCan_write()) {
                     sendServerMessages(i);
+                    System.out.println("CLIENT WRITING SERVER MSG");
                     data.setCan_write(false);
 //                    data.set_read_client(true);
                     data.set_read(true);
@@ -72,7 +74,8 @@ public class Client {
         }
         catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
 

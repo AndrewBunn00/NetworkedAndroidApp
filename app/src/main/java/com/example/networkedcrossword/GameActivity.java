@@ -27,14 +27,21 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
     CrosswordBoard crosswordBoard;
     int clickIndex;
 
-    Data data = new Data();
-    Data networkData;
-    Game game;
+//    Data data = new Data();
+//    Data networkData;
+//    Game game;
+
+    NetworkThread thread;
+    Client client;
+    Server server;
+    Game newGame;
+    Data newData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,17 @@ public class GameActivity extends AppCompatActivity {
 //        LinearLayout layout = new LinearLayout(this);
 //        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 //        layout.setOrientation(LinearLayout.VERTICAL);
+
+        this.thread = (NetworkThread) getIntent().getSerializableExtra("thread");
+
+        if(Objects.equals(thread.serverOrClient, "Server")) {
+            this.newData = thread.getData();
+            this.newGame = thread.serverGame;
+        }
+        else {
+            this.newData = thread.getData();
+            this.newGame = thread.clientGame;
+        }
 
         // Variables for placing prompt in right place
         int offset = 20;
@@ -76,12 +94,14 @@ public class GameActivity extends AppCompatActivity {
 
 
 
-        this.data = (Data) getIntent().getSerializableExtra("data");
-        this.game = (Game) getIntent().getSerializableExtra("game");
-        this.networkData = (Data) getIntent().getSerializableExtra("dataServerOrClient");
+//        this.data = (Data) getIntent().getSerializableExtra("data");
+//        this.game = (Game) getIntent().getSerializableExtra("game");
+
+
+//        this.networkData = (Data) getIntent().getSerializableExtra("dataServerOrClient");
 
         TextView whoAmIText = findViewById(R.id.whoAmIText);
-        if(game.isServer) {
+        if(thread.serverOrClient == "Server") {
 //            whoAmIText.bringToFront();
             whoAmIText.setText("Player 1");
         }
@@ -93,7 +113,7 @@ public class GameActivity extends AppCompatActivity {
 
         // make the crossword view
         crosswordBoard = new CrosswordBoard(this);
-        crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
+        crosswordBoard.setAttributes(newGame.isServer ? 1 : 2, newGame, newGame.getBoard());
 //        setContentView(crosswordBoard);
 
 
@@ -106,8 +126,8 @@ public class GameActivity extends AppCompatActivity {
 //        ((ViewGroup)endTurnButton.getParent()).removeView(endTurnButton);
 
 
-        ArrayList<ArrayList<String>> list = game.board_words;
-        String[] wordsToAdd = new String[game.board_words.size()];
+        ArrayList<ArrayList<String>> list = newGame.board_words;
+        String[] wordsToAdd = new String[newGame.board_words.size()];
 
         for (int i = 0; i < list.size(); i++) {
             wordsToAdd[i] = list.get(i).get(0)+
@@ -134,7 +154,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //check flag to see whose turn
-                if(game.isServer) {
+                if(newGame.isServer) {
                     //player 1
                     //check to see if word has been guessed
                     System.out.println("[onClick index value] "+ clickIndex);
@@ -142,17 +162,17 @@ public class GameActivity extends AppCompatActivity {
                     String checkIfGuessed = parts.get(0)+parts.get(1);
                     System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                     String[][] temp;
-                    System.out.println("SET CONTAINS " + data.guessedWords.contains(checkIfGuessed));
-                    if(!data.guessedWords.contains(checkIfGuessed)) {
+                    System.out.println("SET CONTAINS " + newData.guessedWords.contains(checkIfGuessed));
+                    if(!newData.guessedWords.contains(checkIfGuessed)) {
                         //check to see if word matches correctly
                         String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
                         if(guess.equals(parts.get(2).toUpperCase())) {
                             //player 1 is correct update the gameboard
                             System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
-                            data.guessedWords.add(checkIfGuessed);
-                            data.correctlyGuessedWords[clickIndex] = true;
-                            temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
-                            crosswordBoard.setAttributes(1, game, temp);
+                            newData.guessedWords.add(checkIfGuessed);
+                            newData.correctlyGuessedWords[clickIndex] = true;
+                            temp = newGame.handleBoardStateUpdate(newData.correctlyGuessedWords, list);
+                            crosswordBoard.setAttributes(1, newGame, temp);
                         } else {
                             textInputEditText.setText("");
                         }
@@ -167,17 +187,17 @@ public class GameActivity extends AppCompatActivity {
                     String checkIfGuessed = parts.get(0)+parts.get(1);
                     System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                     String[][] temp;
-                    if(!data.guessedWords.contains(checkIfGuessed)) {
+                    if(!newData.guessedWords.contains(checkIfGuessed)) {
                         //check to see if word matches correctly
                         //check to see if word matches correctly
                         String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
                         if(guess.equals(parts.get(2).toUpperCase())) {
                             System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
-                            data.guessedWords.add(checkIfGuessed);
-                            data.correctlyGuessedWords[clickIndex] = true;
+                            newData.guessedWords.add(checkIfGuessed);
+                            newData.correctlyGuessedWords[clickIndex] = true;
                             //player 1 is correct update the gameboard
-                            temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
-                            crosswordBoard.setAttributes(2, game, temp);
+                            temp = newGame.handleBoardStateUpdate(newData.correctlyGuessedWords, list);
+                            crosswordBoard.setAttributes(2, newGame, temp);
                         } else {
                             textInputEditText.setText("");
                         }
@@ -285,12 +305,12 @@ public class GameActivity extends AppCompatActivity {
 //        }
 
         // update the game
-        data.incrementTurn();
+        newData.incrementTurn();
 
         // prep the data for sending
-        String msg = data.toJson() + "\n";
-        data.setData(msg, true);
-        networkData.setCan_write(true);
+        String msg = newData.toJson() + "\n";
+        newData.setData(msg, true);
+//        networkData.setCan_write(true);
 //        data.set_disable_button(true);
         System.out.println("DONE WITH BUTTON");
 

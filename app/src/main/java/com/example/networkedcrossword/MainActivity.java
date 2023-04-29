@@ -171,13 +171,17 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
 
         if(this.clientThread != null) {
-            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
-            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
+//            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
+//            intent.putExtra("data", clientThread.assignClientData());
+            intent.putExtra("thread", clientThread);
+
 
         }
         else if(this.serverThread != null) {
-            intent.putExtra("game", this.serverThread.serverGame);
-            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
+//            intent.putExtra("game", this.serverThread.serverGame);
+//            intent.putExtra("data", serverThread.assignServerData());
+            intent.putExtra("thread", serverThread);
+
         }
         startActivity(intent);
     }

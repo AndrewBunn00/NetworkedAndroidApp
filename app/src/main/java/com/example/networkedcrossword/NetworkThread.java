@@ -2,10 +2,11 @@ package com.example.networkedcrossword;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class NetworkThread extends Thread {
-    private String serverOrClient;
+public class NetworkThread extends Thread implements Serializable {
+    public String serverOrClient;
     private String message;
     private String ip;
     private int port;
@@ -80,5 +81,9 @@ public class NetworkThread extends Thread {
 
     public Data assignServerData() {
         return server.getServerData();
+    }
+
+    public Data getData() {
+        return data;
     }
 }

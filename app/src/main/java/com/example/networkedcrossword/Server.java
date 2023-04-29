@@ -18,6 +18,7 @@ public class Server {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
+    private Data dataServerOrClient;
     public Game game;
 
     public Server(int port, Data data) {
@@ -49,9 +50,13 @@ public class Server {
             // SEND RECIEVE
             while(true) {
                 sleep(1000);
+                System.out.println("DATA CAN WRITE: " + data.isCan_write());
+                System.out.println("DATA CAN REAd: " + data.can_read());
+
                 if(data.isCan_write()) {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages(i);
+                    System.out.println("SERVER WRITING CLIENT MSG");
                     data.setCan_write(false);
 //                    data.set_read_server(true);
                     data.set_read(true);
@@ -59,6 +64,7 @@ public class Server {
                 // if(data.can_read_server())
                 if(data.can_read()) {
                     receiveClientMessages();
+                    System.out.println("SERVER REC CLIENT MSG");
 //                    data.set_read_server(false);
                     data.set_read(false);
                     data.set_disable_button(false);
@@ -66,10 +72,12 @@ public class Server {
                 i++;
             }
 
+
         }
         catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
