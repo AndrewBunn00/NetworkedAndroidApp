@@ -5,6 +5,8 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
+import android.widget.TextView;
+
 public class Client {
     Socket client;
     private int port;
