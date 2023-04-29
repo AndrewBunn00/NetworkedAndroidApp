@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#99B4CA"
     tools:context=".MainActivity">
 
     <GridView
@@ -75,7 +76,7 @@
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="512dp"
         android:ems="10"
-        android:hint="Enter a Code (ex. ABC)"
+        android:hint="Enter a Port (P1:4000 P2:6000)"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
