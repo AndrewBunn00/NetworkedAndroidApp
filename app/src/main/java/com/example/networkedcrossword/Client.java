@@ -100,7 +100,8 @@ public class Client {
     private void sendServerMessages(int i) {
         try {
 //            writeOut.write("Hello from client " + data.getData() + "\n");
-            writeOut.write("Hello from client " + data.getData() + "\n");
+//            writeOut.write("Hello from client " + data.getData() + "\n");
+            writeOut.write(data.getData() + "\n");
             writeOut.flush();
         }
         catch (IOException e) {

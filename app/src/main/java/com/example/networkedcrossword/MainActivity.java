@@ -1,15 +1,34 @@
 package com.example.networkedcrossword;
 
+import static java.lang.Math.min;
 import static java.lang.Thread.sleep;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
@@ -25,49 +44,65 @@ public class MainActivity extends AppCompatActivity {
     private Game clientMain;
     private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
+
+    CrosswordBoard crosswordBoard;
+    Game game;
+    int clickIndex;
+
+    LinearLayout layout;
+    GridView promptView;
+
 //    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        new Thread(updateTextWithTime).start();
+        this.promptView = findViewById(R.id.promptView);
+//        this.promptView.setVisibility(View.INVISIBLE);
+        ((ViewGroup)promptView.getParent()).removeView(promptView);
+
+        this.layout = findViewById(R.id.linLayout);
+//        this.layout.setVisibility(View.INVISIBLE);
+        ((ViewGroup)layout.getParent()).removeView(layout);
     }
 
     // TODO: Clean up if interrupted
-    public final Runnable updateTextWithTime = new Runnable() {
-        Integer i = 0;
-
-        @Override
-        public void run() {
-            TextView output = findViewById(R.id.writeAnything);
-            while (true) {
-                i++;
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Need to use runOnUiThread to update UI, as main thread must do it
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Stuff that updates the UI
-                        output.setText(i.toString());
-                    }
-                });
-            }
-
-        }
-        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
-//        if (Thread.interrupted()) {
-//            System.out.println("Thread interrupted");
-//            break;
+//    public final Runnable updateTextWithTime = new Runnable() {
+//        Integer i = 0;
+//
+//        @Override
+//        public void run() {
+//            TextView output = findViewById(R.id.writeAnything);
+//            while (true) {
+//                i++;
+//                try {
+//                    sleep(1000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                // Need to use runOnUiThread to update UI, as main thread must do it
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // Stuff that updates the UI
+//                        output.setText(i.toString());
+//                    }
+//                });
+//            }
+//
 //        }
-    };
+//        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+////        if (Thread.interrupted()) {
+////            System.out.println("Thread interrupted");
+////            break;
+////        }
+//    };
 
 
-    public void submitOnClick(View view) {
+    public void submitOnClick(View v) {
+
 
         if(!data.disable_button() && data.is_player1()) {
             TextView textBox = findViewById(R.id.writeAnything);
@@ -87,8 +122,198 @@ public class MainActivity extends AppCompatActivity {
             String msg = data.toJson();
             data.setData(msg, true);
             data.set_disable_button(true);
+
+
+            if(this.clientThread != null) {
+                this.game = this.clientThread.assignClientGame(this.clientThread.client);
+//                intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
+//                intent.putExtra("dataServerOrClient", clientThread.assignClientData());
+
+            }
+            else if(this.serverThread != null) {
+                this.game = this.serverThread.serverGame;
+//                intent.putExtra("game", this.serverThread.serverGame);
+//                intent.putExtra("dataServerOrClient", serverThread.assignServerData());
+            }
+
+
+            removeEverythingFromScreen(textBox);
+//
+            // Screen size
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int windowHeight = displayMetrics.heightPixels;
+            int windowWidth = displayMetrics.widthPixels;
+            int offset = 20;
+
+            // dimensions and offsets for prompt
+            int size = min(windowHeight, windowWidth);
+            int sizeUpdated = size - offset;
+            int heightSizeUpdated = size/3 - offset;
+
+            Point navBarSize = getNavigationBarSize(this);
+            int heightNavBar = navBarSize.y + offset;
+
+            // Readd the linLayout and the game
+
+////            ((ViewGroup)layout.getParent()).removeView(layout);
+////            ((ViewGroup)promptView.getParent()).removeView(promptView);
+//
+            promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
+
+            // Center the promptview at the bottom of the screen
+            int promptHeight = windowHeight - heightSizeUpdated - heightNavBar;
+
+            crosswordBoard = new CrosswordBoard(this);
+            crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
+
+//        int promptHeight = windowHeight - heightSizeUpdated;
+            promptView.setY(promptHeight);
+            promptView.setX(offset/2);
+
+            layout.addView(promptView);
+            layout.addView(crosswordBoard);
+            setContentView(this.layout);
+
+
+            ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+            layoutParams.height = windowHeight;
+            layoutParams.width = windowWidth;
+            layout.setLayoutParams(layoutParams);
+
+            crosswordBoard.setY(-(windowHeight/8));
+
+            new Thread(updateGameView).start();
+
+
+
+
+
+
+
+            ArrayList<ArrayList<String>> list = game.board_words;
+            String[] wordsToAdd = new String[game.board_words.size()];
+
+            for (int i = 0; i < list.size(); i++) {
+                wordsToAdd[i] = list.get(i).get(0)+
+                        ""+
+                        list.get(i).get(1)+
+//                            ""+
+//                            list.get(i).get(2)+
+                        " "+
+                        list.get(i).get(3);
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordsToAdd);
+            promptView.setAdapter(adapter);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Enter Guess");
+
+            TextInputLayout input = new TextInputLayout(this);
+            input.setHint("Click to enter");
+
+            TextInputEditText textInputEditText = new TextInputEditText(this);
+            input.addView(textInputEditText);
+
+            AlertDialog dialogBox = builder.setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //check flag to see whose turn
+                    if(game.isServer) {
+                        //player 1
+                        //check to see if word has been guessed
+                        System.out.println("[onClick index value] "+ clickIndex);
+                        ArrayList<String> parts = list.get(clickIndex);
+                        String checkIfGuessed = parts.get(0)+parts.get(1);
+                        System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                        String[][] temp;
+                        System.out.println("SET CONTAINS " + data.guessedWords.contains(checkIfGuessed));
+                        if(!data.guessedWords.contains(checkIfGuessed)) {
+                            //check to see if word matches correctly
+                            String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
+                            if(guess.equals(parts.get(2).toUpperCase())) {
+                                //player 1 is correct update the gameboard
+                                System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                                data.guessedWords.add(checkIfGuessed);
+                                data.correctlyGuessedWords[clickIndex] = true;
+                                temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
+                                crosswordBoard.setAttributes(1, game, temp);
+                            } else {
+                                textInputEditText.setText("");
+                            }
+                        }
+                        //update gameboard state to be passed server <-> client
+
+                    } else {
+                        // player 2
+                        //check to see if word has been guessed
+                        System.out.println("[onClick index value] " + clickIndex);
+                        ArrayList<String> parts = list.get(clickIndex);
+                        String checkIfGuessed = parts.get(0)+parts.get(1);
+                        System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                        String[][] temp;
+                        if(!data.guessedWords.contains(checkIfGuessed)) {
+                            //check to see if word matches correctly
+                            //check to see if word matches correctly
+                            String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
+                            if(guess.equals(parts.get(2).toUpperCase())) {
+                                System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                                data.guessedWords.add(checkIfGuessed);
+                                data.correctlyGuessedWords[clickIndex] = true;
+                                //player 1 is correct update the gameboard
+                                temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
+                                crosswordBoard.setAttributes(2, game, temp);
+                            } else {
+                                textInputEditText.setText("");
+                            }
+                        }
+                        //update gameboard state to be passed server <-> client
+                    }
+                }
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //do nothing just clear text box.
+                    textInputEditText.setText("");
+                    dialogInterface.dismiss();
+                }
+            }).create();
+
+            promptView.setOnItemClickListener((adapterView, view, i, l) -> {
+                try {
+                    clickIndex = i;
+//                System.out.println("right about show " + i);
+                    dialogBox.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+
+
+
         }
 
+    }
+
+    private void removeEverythingFromScreen(TextView textBox) {
+        TextView title = findViewById(R.id.crosswordTitle);
+        TextView code = findViewById(R.id.code);
+        Button submit = findViewById(R.id.submit);
+        Button createGameButton = findViewById(R.id.createGameButton);
+        Button joinGameButton = findViewById(R.id.joinButton);
+        Button button = findViewById(R.id.button);
+
+
+        // remove everything from the screen
+        ((ViewGroup) textBox.getParent()).removeView(textBox);
+        ((ViewGroup)code.getParent()).removeView(code);
+        ((ViewGroup)title.getParent()).removeView(title);
+        ((ViewGroup)submit.getParent()).removeView(submit);
+        ((ViewGroup)createGameButton.getParent()).removeView(createGameButton);
+        ((ViewGroup)joinGameButton.getParent()).removeView(joinGameButton);
+        ((ViewGroup)button.getParent()).removeView(button);
     }
 // row/col num : a indicates across, d down :
     // needs row col and seedNum for a game obj
@@ -181,6 +406,141 @@ public class MainActivity extends AppCompatActivity {
         }
         startActivity(intent);
     }
+
+
+    public static Point getNavigationBarSize(Context context) {
+        Point appUsableSize = getAppUsableScreenSize(context);
+        Point realScreenSize = getRealScreenSize(context);
+
+        // navigation bar on the right
+        if (appUsableSize.x < realScreenSize.x) {
+            return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
+        }
+
+        // navigation bar at the bottom
+        if (appUsableSize.y < realScreenSize.y) {
+            return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
+        }
+
+        // navigation bar is not present
+        return new Point();
+    }
+
+    // Code below from https://stackoverflow.com/questions/36514167/how-to-really-get-the-navigation-bar-height-in-android
+    public static Point getAppUsableScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
+
+    public static Point getRealScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+        } else if (Build.VERSION.SDK_INT >= 14) {
+            try {
+                size.x = (Integer)     Display.class.getMethod("getRawWidth").invoke(display);
+                size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            }
+            catch (IllegalAccessException e) {}
+            catch     (InvocationTargetException e) {}
+            catch (NoSuchMethodException e) {}
+        }
+
+        return size;
+    }
+
+
+    public void onClickEndTurnMainActivity(View view) {
+        System.out.println("END TURN");
+
+//        if(data.getRecievedUpdate()) {
+//            this.game.updateGame(data.correctlyGuessedWords);
+//            crosswordBoard.invalidate();
+//            data.setRecievedUpdate(false);
+//        }
+
+        // update the game
+        data.incrementTurn();
+
+        // prep the data for sending
+        String msg = data.toJson();
+        data.setData(msg, true);
+//        networkData.setCan_write(true);
+//        data.set_disable_button(true);
+        System.out.println("DONE WITH BUTTON");
+
+
+    }
+
+
+    // TODO: Clean up if interrupted
+    public final Runnable updateTextWithTime = new Runnable() {
+        Integer i = 0;
+        @Override
+        public void run() {
+            TextView output = findViewById(R.id.writeAnything);
+            while (true) {
+                i++;
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // Need to use runOnUiThread to update UI, as main thread must do it
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+                        output.setText(i.toString());
+                    }
+                });
+            }
+        }
+        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+//        if (Thread.interrupted()) {
+//            System.out.println("Thread interrupted");
+//            break;
+//        }
+    };
+
+
+
+    public final Runnable updateGameView = new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // Need to use runOnUiThread to update UI, as main thread must do it
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+//                        output.setText(i.toString());
+                        crosswordBoard.invalidate();
+                    }
+                });
+
+
+            }
+        }
+        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+//        if (Thread.interrupted()) {
+//            System.out.println("Thread interrupted");
+//            break;
+//        }
+    };
 
 
 
