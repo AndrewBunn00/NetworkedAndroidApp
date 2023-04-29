@@ -22,6 +22,8 @@ public class Data implements Serializable {
     private boolean disable_button = false;
     private boolean is_player1 = false;
 
+    private boolean recievedUpdate = false;
+
     private String boardStats = "";
 
     public String[][] passedBoardState;
@@ -215,5 +217,13 @@ public class Data implements Serializable {
 
     public String getBoardStats() {
         return this.boardStats;
+    }
+
+    public void setRecievedUpdate(boolean value) {
+        this.recievedUpdate = value;
+    }
+
+    public boolean getRecievedUpdate() {
+        return this.recievedUpdate;
     }
 }

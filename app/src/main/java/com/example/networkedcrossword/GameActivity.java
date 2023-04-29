@@ -32,6 +32,9 @@ public class GameActivity extends AppCompatActivity {
     CrosswordBoard crosswordBoard;
     int clickIndex;
 
+    Data data = new Data();
+    Game game;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +75,8 @@ public class GameActivity extends AppCompatActivity {
 
 
 
-        Data data = (Data) getIntent().getSerializableExtra("data");
-        Game game = (Game) getIntent().getSerializableExtra("game");
+        this.data = (Data) getIntent().getSerializableExtra("data");
+        this.game = (Game) getIntent().getSerializableExtra("game");
 
         TextView whoAmIText = findViewById(R.id.whoAmIText);
         if(game.isServer) {
@@ -273,6 +276,21 @@ public class GameActivity extends AppCompatActivity {
 
     public void onClickEndTurn(View view) {
         System.out.println("END TURN");
+
+        // update the game
+        data.incrementTurn();
+
+        // prep the data for sending
+        String msg = data.toJson();
+        data.setData(msg, true);
+//        data.set_disable_button(true);
+
+
+        if(data.getRecievedUpdate()) {
+            this.game.updateGame(data.correctlyGuessedWords);
+            crosswordBoard.invalidate();
+            data.setRecievedUpdate(false);
+        }
     }
 
 

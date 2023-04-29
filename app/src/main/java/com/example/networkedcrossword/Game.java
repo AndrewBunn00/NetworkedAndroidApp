@@ -99,8 +99,8 @@ public class Game implements Serializable {
     }
     public String[][] handleBoardStateUpdate(boolean[] solved, ArrayList<ArrayList<String>> words) {
 
-        System.out.println(this.boardSeed);
-        System.out.println(this.seed);
+//        System.out.println(this.boardSeed);
+//        System.out.println(this.seed);
         String[][] updatedGameBoard = this.getBoard();
 
         for (int i = 0; i < solved.length; i++) {
@@ -150,4 +150,10 @@ public class Game implements Serializable {
         // Update the board with the selected word
 
     }
+
+    public void updateGame(boolean[] correctlyGuessedWords) {
+        handleBoardStateUpdate(correctlyGuessedWords, this.board_words);
+    }
+
+
 }
