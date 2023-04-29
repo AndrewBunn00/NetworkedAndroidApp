@@ -1,16 +1,7 @@
 package com.example.networkedcrossword;
 
-import android.content.Context;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Dict implements Serializable {
     private ArrayList<ArrayList<String>> boards;
@@ -69,11 +60,15 @@ public class Dict implements Serializable {
         file = new ArrayList<String>();
         for(int i = 0; i < splitArray.length; i++){
             String[] parts = splitArray[i].split(":");
-            for(int j = 0; j < parts.length; i++) {
-                boards.get(i).add(parts[j]);
+            for(int j = 0; j < parts.length; j++) {
+                this.boards.get(i).add(parts[j]);
             }
         }
 
         return boards;
+    }
+
+    public ArrayList<ArrayList<String>> getBoards() {
+        return this.boards;
     }
 }
