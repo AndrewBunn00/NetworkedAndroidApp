@@ -79,6 +79,7 @@ public class Server {
 
     private void receiveClientMessages() {
         try {
+            System.out.println("[] Server waiting for client message\n");
             String read = readIn.readLine();
             System.out.println("[] Server received: " + read + "\n");
             data.setDataOnly(read);
@@ -165,6 +166,10 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Data getServerData() {
+        return this.data;
     }
 
 

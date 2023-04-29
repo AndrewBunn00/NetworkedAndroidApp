@@ -33,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     int clickIndex;
 
     Data data = new Data();
+    Data networkData;
     Game game;
 
     @Override
@@ -77,6 +78,7 @@ public class GameActivity extends AppCompatActivity {
 
         this.data = (Data) getIntent().getSerializableExtra("data");
         this.game = (Game) getIntent().getSerializableExtra("game");
+        this.networkData = (Data) getIntent().getSerializableExtra("dataServerOrClient");
 
         TextView whoAmIText = findViewById(R.id.whoAmIText);
         if(game.isServer) {
@@ -288,8 +290,9 @@ public class GameActivity extends AppCompatActivity {
         // prep the data for sending
         String msg = data.toJson() + "\n";
         data.setData(msg, true);
+        networkData.setCan_write(true);
 //        data.set_disable_button(true);
-
+        System.out.println("DONE WITH BUTTON");
 
 
     }

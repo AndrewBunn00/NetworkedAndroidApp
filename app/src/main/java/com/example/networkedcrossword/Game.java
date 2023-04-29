@@ -29,6 +29,8 @@ public class Game implements Serializable {
 
     public boolean isServer = false;
 
+    public boolean assignedInClient = false;
+
     public Game(int dim, int seed){
         this.seed = seed;
         this.row = dim;
@@ -37,6 +39,7 @@ public class Game implements Serializable {
         this.generateStructure();
         this.untouchedBoard = this.copyInitialArray();
         this.board_words = this.buildDictList();
+
     }
     private ArrayList<ArrayList<String>> buildDictList() {
         return this.dict.build();

@@ -172,9 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(this.clientThread != null) {
             intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
+            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
+
         }
         else if(this.serverThread != null) {
             intent.putExtra("game", this.serverThread.serverGame);
+            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
         }
         startActivity(intent);
     }

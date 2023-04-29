@@ -12,6 +12,8 @@ public class NetworkThread extends Thread {
     private Data data;
     public Client client;
 
+    public Server server;
+
     public Game clientGame;
     public Game serverGame;
 
@@ -53,7 +55,7 @@ public class NetworkThread extends Thread {
 
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
-            Server server = new Server(port, data);
+            this.server = new Server(port, data);
             this.serverGame = server.game;
             server.serverStart();
         }
@@ -70,5 +72,13 @@ public class NetworkThread extends Thread {
     }
     public Game assignClientGame(Client client) {
         return client.clientGame();
+    }
+
+    public Data assignClientData() {
+        return client.getClientData();
+    }
+
+    public Data assignServerData() {
+        return server.getServerData();
     }
 }

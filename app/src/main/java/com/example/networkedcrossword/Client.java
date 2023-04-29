@@ -47,7 +47,7 @@ public class Client {
             int seed = Integer.parseInt(split[1]);
             this.game = new Game(dim, seed);
             System.out.println("Stuff" + game.isServer);
-//            System.out.println("BOOOOOOARD STATS: " + boardStats);
+
             // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);
@@ -106,6 +106,10 @@ public class Client {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Data getClientData() {
+        return this.data;
     }
 
 
