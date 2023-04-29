@@ -85,6 +85,7 @@ public class Client {
 
     private void receiveServerMessages() {
         try {
+            System.out.println("[Client] right before readline");
             String read = readIn.readLine();
             System.out.println("[] Client received: " + read + "\n");
             data.setDataOnly(read);

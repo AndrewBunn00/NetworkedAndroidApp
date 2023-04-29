@@ -128,8 +128,6 @@ public class GameActivity extends AppCompatActivity {
         TextInputEditText textInputEditText = new TextInputEditText(this);
         input.addView(textInputEditText);
 
-
-
         AlertDialog dialogBox = builder.setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -144,12 +142,12 @@ public class GameActivity extends AppCompatActivity {
                     String[][] temp;
                     System.out.println("SET CONTAINS " + data.guessedWords.contains(checkIfGuessed));
                     if(!data.guessedWords.contains(checkIfGuessed)) {
-                        data.guessedWords.add(checkIfGuessed);
                         //check to see if word matches correctly
                         String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
                         if(guess.equals(parts.get(2).toUpperCase())) {
                             //player 1 is correct update the gameboard
                             System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                            data.guessedWords.add(checkIfGuessed);
                             data.correctlyGuessedWords[clickIndex] = true;
                             temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
                             crosswordBoard.setAttributes(1, game, temp);
@@ -169,15 +167,15 @@ public class GameActivity extends AppCompatActivity {
                     String[][] temp;
                     if(!data.guessedWords.contains(checkIfGuessed)) {
                         //check to see if word matches correctly
-                        data.guessedWords.add(checkIfGuessed);
                         //check to see if word matches correctly
                         String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
                         if(guess.equals(parts.get(2).toUpperCase())) {
                             System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                            data.guessedWords.add(checkIfGuessed);
                             data.correctlyGuessedWords[clickIndex] = true;
                             //player 1 is correct update the gameboard
                             temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
-                            crosswordBoard.setAttributes(1, game, temp);
+                            crosswordBoard.setAttributes(2, game, temp);
                         } else {
                             textInputEditText.setText("");
                         }
@@ -190,6 +188,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //do nothing just clear text box.
                 textInputEditText.setText("");
+                dialogInterface.dismiss();
             }
         }).create();
 
@@ -281,7 +280,7 @@ public class GameActivity extends AppCompatActivity {
         data.incrementTurn();
 
         // prep the data for sending
-        String msg = data.toJson();
+        String msg = data.toJson() + "\n";
         data.setData(msg, true);
 //        data.set_disable_button(true);
 
