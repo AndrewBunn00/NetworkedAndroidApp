@@ -5,10 +5,11 @@ Getting started:
 
 Setting up a device:
 
-Connecting two emulators:
 
+Connecting two emulators:
 - Enable telnet in the control panel (for Windows)
 - Run both emulators in the ide (server on is on 10.0.2.15 & client on 10.0.2.2, it is coded to be this way)
+
 
 Connect to a device via Telnet:
 - First emulator ID will be 5554, and second 5556 (confirm in the run window of the IDE, can search
@@ -17,6 +18,7 @@ for "555" to find if it is 5554 or 5556)
 - Be sure to run the command prompt as administrator
 - If command did not work, do 'telnet localhost 5554' (no colon)
 - Start the server with port 4000 from the app in the emulator (enter port number 4000 and hit 'Create')
+
 
 Telnet Auth and Redirection:
 - In the command prompt (for windows) it will ask the user to authenticate before any redirections can be made,
@@ -28,3 +30,16 @@ port 6000 on the client to port 4000 on the server
 - If it fails, need to say auth <authToken> (telnet window says where to get it at the top)
 - After adding the redirect successfully, enter port 6000 on the client and hit "Join"
 - Should see communication in the run window of the ide, the server should print out 'client connected'
+
+
+Server Client Communication:
+- On successful connection, the server sends the client the seed for which board to use. The client
+then generates the board.
+- The client will be blocking for read, waiting for the server to write to its buffer.
+- Once the server turn is over, it will update a list of all the words that have been found, and send
+that list to the client.
+- The client will then update its list of words found, and update the board with the new words found
+and be able to take their turn.
+- The client will update the word list and send it back to the server, who will then update their
+board and word list.
+- This process repeats until the game is over.
