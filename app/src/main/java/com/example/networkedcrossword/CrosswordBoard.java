@@ -1,16 +1,33 @@
 package com.example.networkedcrossword;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
 
-public class CrosswordBoard extends View {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.zip.Inflater;
+
+public class CrosswordBoard extends View{
     private int player;
     private Game game;
     private Paint paint = new Paint();
@@ -19,15 +36,15 @@ public class CrosswordBoard extends View {
     private int maxY = 0;
     private int maxX = 0;
     private String[][] board;
-
     public CrosswordBoard(Context context) {
         super(context);
     }
 
-    public void setAttributes(int player, Game game) {
+    public void setAttributes(int player, Game game, String[][] newBoard) {
         this.player = player;
         this.game = game;
-        this.board = game.getBoard();
+//        this.board = game.getBoard();
+        this.board = newBoard;
         invalidate(); // force view to redraw itself
     }
 
@@ -103,7 +120,6 @@ public class CrosswordBoard extends View {
                 }
             }
         }
-
-
     }
+
 }

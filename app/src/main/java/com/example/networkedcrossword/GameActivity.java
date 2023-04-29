@@ -2,9 +2,11 @@ package com.example.networkedcrossword;
 
 import static java.lang.Math.min;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,15 +15,21 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
     CrosswordBoard crosswordBoard;
-
+    int clickIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
 
         // make the crossword view
         crosswordBoard = new CrosswordBoard(this);
-        crosswordBoard.setAttributes(game.isServer ? 1 : 2, game);
+        crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
 //        setContentView(crosswordBoard);
 
 
@@ -87,6 +95,106 @@ public class GameActivity extends AppCompatActivity {
         LinearLayout layout = findViewById(R.id.linLayout);
         ((ViewGroup)layout.getParent()).removeView(layout);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
+
+
+        ArrayList<ArrayList<String>> list = game.board_words;
+        String[] wordsToAdd = new String[game.board_words.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            wordsToAdd[i] = list.get(i).get(0)+
+                            ""+
+                            list.get(i).get(1)+
+//                            ""+
+//                            list.get(i).get(2)+
+                            " "+
+                            list.get(i).get(3);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordsToAdd);
+        promptView.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Guess");
+
+        TextInputLayout input = new TextInputLayout(this);
+        input.setHint("Click to enter");
+
+        TextInputEditText textInputEditText = new TextInputEditText(this);
+        input.addView(textInputEditText);
+
+
+
+        AlertDialog dialogBox = builder.setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //check flag to see whose turn
+                if(game.isServer) {
+                    //player 1
+                    //check to see if word has been guessed
+                    System.out.println("[onClick index value] "+ clickIndex);
+                    ArrayList<String> parts = list.get(clickIndex);
+                    String checkIfGuessed = parts.get(0)+parts.get(1);
+                    System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                    String[][] temp;
+                    System.out.println("SET CONTAINS " + data.guessedWords.contains(checkIfGuessed));
+                    if(!data.guessedWords.contains(checkIfGuessed)) {
+                        data.guessedWords.add(checkIfGuessed);
+                        //check to see if word matches correctly
+                        String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
+                        if(guess.equals(parts.get(2).toUpperCase())) {
+                            //player 1 is correct update the gameboard
+                            System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                            data.correctlyGuessedWords[clickIndex] = true;
+                            temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
+                            crosswordBoard.setAttributes(1, game, temp);
+                        } else {
+                            textInputEditText.setText("");
+                        }
+                    }
+                    //update gameboard state to be passed server <-> client
+
+                } else {
+                    // player 2
+                    //check to see if word has been guessed
+                    System.out.println("[onClick index value] " + clickIndex);
+                    ArrayList<String> parts = list.get(clickIndex);
+                    String checkIfGuessed = parts.get(0)+parts.get(1);
+                    System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                    String[][] temp;
+                    if(!data.guessedWords.contains(checkIfGuessed)) {
+                        //check to see if word matches correctly
+                        data.guessedWords.add(checkIfGuessed);
+                        //check to see if word matches correctly
+                        String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
+                        if(guess.equals(parts.get(2).toUpperCase())) {
+                            System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
+                            data.correctlyGuessedWords[clickIndex] = true;
+                            //player 1 is correct update the gameboard
+                            temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
+                            crosswordBoard.setAttributes(1, game, temp);
+                        } else {
+                            textInputEditText.setText("");
+                        }
+                    }
+                    //update gameboard state to be passed server <-> client
+                }
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //do nothing just clear text box.
+                textInputEditText.setText("");
+            }
+        }).create();
+
+        promptView.setOnItemClickListener((adapterView, view, i, l) -> {
+            try {
+                clickIndex = i;
+//                System.out.println("right about show " + i);
+                dialogBox.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         layout.addView(promptView);
         layout.addView(crosswordBoard);

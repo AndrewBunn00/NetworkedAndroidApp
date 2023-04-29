@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Data implements Serializable {
     // variables
@@ -20,6 +22,10 @@ public class Data implements Serializable {
     private boolean is_player1 = false;
 
     private String boardStats = "";
+
+    public String[][] passedBoardState;
+    public Set<String> guessedWords = new HashSet<>();
+    public boolean[] correctlyGuessedWords = new boolean[10];
 
     private int total_words = 0;
 

@@ -32,7 +32,7 @@ public class Server {
 
     public void serverStart() {
         System.out.println("Starting server\n");
-        this.game.handleBoardStateUpdate();
+//        this.game.handleBoardStateUpdate();
         try {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();

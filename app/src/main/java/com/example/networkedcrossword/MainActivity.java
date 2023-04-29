@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 //    private int seed = 1;
     private int dim = 8;
     private Game clientMain;
-    private int seed = (int) (Math.random() * 4) + 1;
+    private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
 //    private Handler handler;
     @Override
@@ -176,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
         else if(this.serverThread != null) {
             intent.putExtra("game", this.serverThread.serverGame);
         }
-
-
         startActivity(intent);
     }
 
