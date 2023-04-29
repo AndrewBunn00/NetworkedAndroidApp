@@ -1,15 +1,27 @@
 package com.example.networkedcrossword;
 
+import static java.lang.Math.min;
 import static java.lang.Thread.sleep;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
@@ -25,12 +37,26 @@ public class MainActivity extends AppCompatActivity {
     private Game clientMain;
     private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
+
+    CrosswordBoard crosswordBoard;
+    Game game;
+
+    LinearLayout layout;
+    GridView promptView;
+
 //    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        new Thread(updateTextWithTime).start();
+        this.promptView = findViewById(R.id.promptView);
+//        this.promptView.setVisibility(View.INVISIBLE);
+        ((ViewGroup)promptView.getParent()).removeView(promptView);
+
+        this.layout = findViewById(R.id.linLayout);
+//        this.layout.setVisibility(View.INVISIBLE);
+        ((ViewGroup)layout.getParent()).removeView(layout);
     }
 
     // TODO: Clean up if interrupted
@@ -69,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void submitOnClick(View view) {
 
+
         if(!data.disable_button() && data.is_player1()) {
             TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
@@ -87,8 +114,91 @@ public class MainActivity extends AppCompatActivity {
             String msg = data.toJson();
             data.setData(msg, true);
             data.set_disable_button(true);
+
+
+            if(this.clientThread != null) {
+                this.game = this.clientThread.assignClientGame(this.clientThread.client);
+//                intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
+//                intent.putExtra("dataServerOrClient", clientThread.assignClientData());
+
+            }
+            else if(this.serverThread != null) {
+                this.game = this.serverThread.serverGame;
+//                intent.putExtra("game", this.serverThread.serverGame);
+//                intent.putExtra("dataServerOrClient", serverThread.assignServerData());
+            }
+
+
+            removeEverythingFromScreen(textBox);
+//
+            // Screen size
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int windowHeight = displayMetrics.heightPixels;
+            int windowWidth = displayMetrics.widthPixels;
+            int offset = 20;
+
+            // dimensions and offsets for prompt
+            int size = min(windowHeight, windowWidth);
+            int sizeUpdated = size - offset;
+            int heightSizeUpdated = size/3 - offset;
+
+            Point navBarSize = getNavigationBarSize(this);
+            int heightNavBar = navBarSize.y + offset;
+
+            // Readd the linLayout and the game
+
+////            ((ViewGroup)layout.getParent()).removeView(layout);
+////            ((ViewGroup)promptView.getParent()).removeView(promptView);
+//
+            promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
+
+            // Center the promptview at the bottom of the screen
+            int promptHeight = windowHeight - heightSizeUpdated - heightNavBar;
+
+            crosswordBoard = new CrosswordBoard(this);
+            crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
+
+//        int promptHeight = windowHeight - heightSizeUpdated;
+            promptView.setY(promptHeight);
+            promptView.setX(offset/2);
+
+            layout.addView(promptView);
+            layout.addView(crosswordBoard);
+            setContentView(this.layout);
+
+
+            ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+            layoutParams.height = windowHeight;
+            layoutParams.width = windowWidth;
+            layout.setLayoutParams(layoutParams);
+
+            crosswordBoard.setY(-(windowHeight/8));
+
+
+
+
         }
 
+    }
+
+    private void removeEverythingFromScreen(TextView textBox) {
+        TextView title = findViewById(R.id.crosswordTitle);
+        TextView code = findViewById(R.id.code);
+        Button submit = findViewById(R.id.submit);
+        Button createGameButton = findViewById(R.id.createGameButton);
+        Button joinGameButton = findViewById(R.id.joinButton);
+        Button button = findViewById(R.id.button);
+
+
+        // remove everything from the screen
+        ((ViewGroup) textBox.getParent()).removeView(textBox);
+        ((ViewGroup)code.getParent()).removeView(code);
+        ((ViewGroup)title.getParent()).removeView(title);
+        ((ViewGroup)submit.getParent()).removeView(submit);
+        ((ViewGroup)createGameButton.getParent()).removeView(createGameButton);
+        ((ViewGroup)joinGameButton.getParent()).removeView(joinGameButton);
+        ((ViewGroup)button.getParent()).removeView(button);
     }
 // row/col num : a indicates across, d down :
     // needs row col and seedNum for a game obj
@@ -183,5 +293,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public static Point getNavigationBarSize(Context context) {
+        Point appUsableSize = getAppUsableScreenSize(context);
+        Point realScreenSize = getRealScreenSize(context);
+
+        // navigation bar on the right
+        if (appUsableSize.x < realScreenSize.x) {
+            return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
+        }
+
+        // navigation bar at the bottom
+        if (appUsableSize.y < realScreenSize.y) {
+            return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
+        }
+
+        // navigation bar is not present
+        return new Point();
+    }
+
+    // Code below from https://stackoverflow.com/questions/36514167/how-to-really-get-the-navigation-bar-height-in-android
+    public static Point getAppUsableScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
+
+    public static Point getRealScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+        } else if (Build.VERSION.SDK_INT >= 14) {
+            try {
+                size.x = (Integer)     Display.class.getMethod("getRawWidth").invoke(display);
+                size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            }
+            catch (IllegalAccessException e) {}
+            catch     (InvocationTargetException e) {}
+            catch (NoSuchMethodException e) {}
+        }
+
+        return size;
+    }
 
 }
