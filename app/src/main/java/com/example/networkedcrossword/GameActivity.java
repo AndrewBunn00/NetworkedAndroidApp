@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -93,8 +94,11 @@ public class GameActivity extends AppCompatActivity {
 
         // remove views from the activity and add to the layout
         LinearLayout layout = findViewById(R.id.linLayout);
+        Button endTurnButton = findViewById(R.id.endTurnButton);
+
         ((ViewGroup)layout.getParent()).removeView(layout);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
+//        ((ViewGroup)endTurnButton.getParent()).removeView(endTurnButton);
 
 
         ArrayList<ArrayList<String>> list = game.board_words;
@@ -197,6 +201,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         layout.addView(promptView);
+//        layout.addView(endTurnButton);
         layout.addView(crosswordBoard);
         setContentView(layout);
 
@@ -206,6 +211,12 @@ public class GameActivity extends AppCompatActivity {
         layout.setLayoutParams(layoutParams);
 
         crosswordBoard.setY(-(windowHeight/8));
+
+//        endTurnButton.setX(windowWidth - windowWidth/3);
+//        endTurnButton.setY(windowHeight - windowHeight/2);
+//        endTurnButton.bringToFront();
+
+
 //        promptView.setY(windowHeight - windowHeight/3);
 
     }
@@ -259,6 +270,10 @@ public class GameActivity extends AppCompatActivity {
         return size;
     }
 
+
+    public void onClickEndTurn(View view) {
+        System.out.println("END TURN");
+    }
 
 
 }

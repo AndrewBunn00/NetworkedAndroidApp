@@ -3,6 +3,7 @@ package com.example.networkedcrossword;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -104,6 +105,10 @@ public class Data implements Serializable {
         map.put("player2_score", String.valueOf(this.player2_score));
         map.put("turn", String.valueOf(this.turn));
         map.put("total_words", String.valueOf(this.total_words));
+        String words = Arrays.toString(this.correctlyGuessedWords);
+        words = words.replace(",", ";");
+        map.put("correctlyGuessedWords", words);
+
 
 
         JSONObject json = new JSONObject(map);
@@ -125,12 +130,20 @@ public class Data implements Serializable {
 
         for(String s : partialSplit) {
             values = s.split(":");
+
             if(values[0].contains("{")) {
                 values[0] = values[0].replace("{", "");
             }
             if(values[1].contains("}")) {
                 values[1] = values[1].replace("}", "");
             }
+            if(values[1].contains("[")) {
+                values[1] = values[1].replace("[", "");
+            }
+            if(values[1].contains("]")) {
+                values[1] = values[1].replace("]", "");
+            }
+
             values[0] = values[0].replace("\"", "");
             values[1] = values[1].replace("\"", "");
 
@@ -151,6 +164,21 @@ public class Data implements Serializable {
         this.player2_score = Integer.parseInt(map.get("player2_score"));
         this.turn = Integer.parseInt(map.get("turn"));
         this.total_words = Integer.parseInt(map.get("total_words"));
+
+        // TODO: rebuild boolean array and set it
+        boolean[] correctlyGuessedWordsPlaceholder = new boolean[10];
+        String strOfBools = map.get("correctlyGuessedWords");
+        String[] indivBools = strOfBools.split(";");
+        for(int i = 0; i < correctlyGuessedWordsPlaceholder.length; i++) {
+            if(indivBools[i].contains("true")) {
+                correctlyGuessedWordsPlaceholder[i] = true;
+            }
+            else {
+                correctlyGuessedWordsPlaceholder[i] = false;
+            }
+        }
+
+        this.correctlyGuessedWords = correctlyGuessedWordsPlaceholder;
 
 
     }
