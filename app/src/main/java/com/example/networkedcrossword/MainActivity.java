@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         data.incrementTurn();
 
         // prep the data for sending
-        String msg = data.toJson() + "\n";
+        String msg = data.toJson();
         data.setData(msg, true);
 //        networkData.setCan_write(true);
 //        data.set_disable_button(true);
