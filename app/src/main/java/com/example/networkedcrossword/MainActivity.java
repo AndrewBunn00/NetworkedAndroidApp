@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Game clientMain;
     private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
+    private boolean threadCreated = false;
 
     CrosswordBoard crosswordBoard;
     Game game;
@@ -212,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
                                 textInputEditText.setText("");
                             }
                         }
-                        //update gameboard state to be passed server <-> client
                     }
                 }
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -233,10 +233,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
-
-
-
         }
 
     }
@@ -247,99 +243,81 @@ public class MainActivity extends AppCompatActivity {
         Button submit = findViewById(R.id.submit);
         Button createGameButton = findViewById(R.id.createGameButton);
         Button joinGameButton = findViewById(R.id.joinButton);
-//        Button button = findViewById(R.id.button);
-
 
         // remove everything from the screen
-//        ((ViewGroup) textBox.getParent()).removeView(textBox);
         ((ViewGroup)code.getParent()).removeView(code);
         ((ViewGroup)title.getParent()).removeView(title);
         ((ViewGroup)submit.getParent()).removeView(submit);
         ((ViewGroup)createGameButton.getParent()).removeView(createGameButton);
         ((ViewGroup)joinGameButton.getParent()).removeView(joinGameButton);
-//        ((ViewGroup)button.getParent()).removeView(button);
     }
-// row/col num : a indicates across, d down :
-    // needs row col and seedNum for a game obj
+
 
     public void createGame(View view) {
-        data.set_isplayer1(true);
-        TextView codeTextBox = findViewById(R.id.code);
-        String text = codeTextBox.getText().toString();
-        StringBuilder str = new StringBuilder();
-        str.append(dim);
-        str.append(",");
-        str.append(seed);
-        data.setBoardStats(str.toString());
-        // Check that the code is the right length and alert if not
-        if(text.length() != 4) {
-            Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
-            return;
+        // if server nor client started yet, start this one
+        if(!threadCreated) {
+
+            data.set_isplayer1(true);
+            TextView codeTextBox = findViewById(R.id.code);
+            String text = codeTextBox.getText().toString();
+            StringBuilder str = new StringBuilder();
+            str.append(dim);
+            str.append(",");
+            str.append(seed);
+            data.setBoardStats(str.toString());
+            // Check that the code is the right length and alert if not
+            if (text.length() != 4) {
+                Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            System.out.println("Starting a server, on port number: " + text);
+
+            // TODO: call server code here
+            // create server
+            int portNumber;
+            try {
+                portNumber = Integer.parseInt(text);
+            } catch (NumberFormatException e) {
+                portNumber = 1880;
+            }
+
+            serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
+            serverThread.start();
+            threadCreated = true;
         }
-
-        System.out.println("Starting a server, on port number: " + text);
-
-        // TODO: call server code here
-        // create server
-        int portNumber;
-        try {
-            portNumber = Integer.parseInt(text);
-        }
-        catch (NumberFormatException e) {
-            portNumber = 1880;
-        }
-
-        serverThread = new NetworkThread("Server", text, "10.0.2.15", portNumber, data);
-        serverThread.start();
-
     }
-
 
 
     public void joinGame(View view) {
-        data.set_isplayer1(false);
-        TextView codeTextBox = findViewById(R.id.code);
-        String text = codeTextBox.getText().toString();
+        // if button not yet pressed
+        if (!threadCreated) {
 
-        // Check that the code is the right length and alert if not
-        if(text.length() != 4) {
-            Toast.makeText(this, "Port Number must be length 4 and Match server port", Toast.LENGTH_SHORT).show();
-            return;
+
+            data.set_isplayer1(false);
+            TextView codeTextBox = findViewById(R.id.code);
+            String text = codeTextBox.getText().toString();
+
+            // Check that the code is the right length and alert if not
+            if (text.length() != 4) {
+                Toast.makeText(this, "Port Number must be length 4 and Match server port", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int portNumber;
+            try {
+                portNumber = Integer.parseInt(text);
+            } catch (NumberFormatException e) {
+                portNumber = 1880;
+            }
+
+            // TODO: call client code here
+            clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
+            clientThread.start();
+            threadCreated = true;
         }
-
-        int portNumber;
-        try {
-            portNumber = Integer.parseInt(text);
-        }
-        catch (NumberFormatException e) {
-            portNumber = 1880;
-        }
-
-        // TODO: call client code here
-        clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
-        clientThread.start();
-
     }
 
-    public void startGameButton(View view) {
-//        System.out.println("ENTERING GAME WINDOW");
-//
-//        Intent intent = new Intent(this, GameActivity.class);
-//        intent.putExtra("data", data);
-//
-////        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
-//
-//        if(this.clientThread != null) {
-//            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
-//            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
-//
-//        }
-//        else if(this.serverThread != null) {
-//            intent.putExtra("game", this.serverThread.serverGame);
-//            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
-//        }
-//        startActivity(intent);
-    }
 
 
     public static Point getNavigationBarSize(Context context) {
