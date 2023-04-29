@@ -69,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(!data.disable_button() && data.is_player1()) {
-            TextView textBox = findViewById(R.id.writeAnything);
+//            TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
-            String text = textBox.getText().toString();
+//            String text = textBox.getText().toString();
 
             // update the game
             data.incrementTurn();
 
-            System.out.println("Send the string over! " + text);
+            System.out.println("Send the string over! ");
 
             // prep the data for sending
             String msg = data.toJson();
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 this.game = this.serverThread.serverGame;
             }
 
-            removeEverythingFromScreen(textBox);
+            removeEverythingFromScreen();
 
             // Screen size
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -241,23 +241,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void removeEverythingFromScreen(TextView textBox) {
+    private void removeEverythingFromScreen() {
         TextView title = findViewById(R.id.crosswordTitle);
         TextView code = findViewById(R.id.code);
         Button submit = findViewById(R.id.submit);
         Button createGameButton = findViewById(R.id.createGameButton);
         Button joinGameButton = findViewById(R.id.joinButton);
-        Button button = findViewById(R.id.button);
+//        Button button = findViewById(R.id.button);
 
 
         // remove everything from the screen
-        ((ViewGroup) textBox.getParent()).removeView(textBox);
+//        ((ViewGroup) textBox.getParent()).removeView(textBox);
         ((ViewGroup)code.getParent()).removeView(code);
         ((ViewGroup)title.getParent()).removeView(title);
         ((ViewGroup)submit.getParent()).removeView(submit);
         ((ViewGroup)createGameButton.getParent()).removeView(createGameButton);
         ((ViewGroup)joinGameButton.getParent()).removeView(joinGameButton);
-        ((ViewGroup)button.getParent()).removeView(button);
+//        ((ViewGroup)button.getParent()).removeView(button);
     }
 // row/col num : a indicates across, d down :
     // needs row col and seedNum for a game obj
@@ -322,23 +322,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGameButton(View view) {
-        System.out.println("ENTERING GAME WINDOW");
-
-        Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("data", data);
-
-//        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
-
-        if(this.clientThread != null) {
-            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
-            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
-
-        }
-        else if(this.serverThread != null) {
-            intent.putExtra("game", this.serverThread.serverGame);
-            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
-        }
-        startActivity(intent);
+//        System.out.println("ENTERING GAME WINDOW");
+//
+//        Intent intent = new Intent(this, GameActivity.class);
+//        intent.putExtra("data", data);
+//
+////        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
+//
+//        if(this.clientThread != null) {
+//            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
+//            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
+//
+//        }
+//        else if(this.serverThread != null) {
+//            intent.putExtra("game", this.serverThread.serverGame);
+//            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
+//        }
+//        startActivity(intent);
     }
 
 
