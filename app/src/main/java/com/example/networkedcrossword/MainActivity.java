@@ -69,10 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public void submitOnClick(View v) {
 
 
-        if(!data.disable_button() && data.is_player1()) {
-//            TextView textBox = findViewById(R.id.writeAnything);
-//        output.setText("You touched me");
-//            String text = textBox.getText().toString();
+        if(threadCreated) {
 
             // update the game
             data.incrementTurn();
