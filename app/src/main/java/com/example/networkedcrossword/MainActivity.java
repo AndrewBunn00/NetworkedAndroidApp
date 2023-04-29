@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     int playerTurnNum = 1;
     LinearLayout layout;
     GridView promptView;
+    TextView player_turn_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             removeEverythingFromScreen();
+            player_turn_text = findViewById(R.id.player_turn);
 
             // Screen size
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -338,25 +340,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startGameButton(View view) {
-//        System.out.println("ENTERING GAME WINDOW");
-//
-//        Intent intent = new Intent(this, GameActivity.class);
-//        intent.putExtra("data", data);
-//
-////        System.out.println("CHECK IF EXISTS: " + serverThread.serverGame.isServer);
-//
-//        if(this.clientThread != null) {
-//            intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
-//            intent.putExtra("dataServerOrClient", clientThread.assignClientData());
-//
-//        }
-//        else if(this.serverThread != null) {
-//            intent.putExtra("game", this.serverThread.serverGame);
-//            intent.putExtra("dataServerOrClient", serverThread.assignServerData());
-//        }
-//        startActivity(intent);
-    }
 
 
     public static Point getNavigationBarSize(Context context) {
@@ -429,12 +412,29 @@ public class MainActivity extends AppCompatActivity {
                 // Need to use runOnUiThread to update UI, as main thread must do it
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() { crosswordBoard.invalidate(); }
+                    public void run() {
+                        crosswordBoard.invalidate();
+
+//                        if(player_turn_text.getVisibility() == View.VISIBLE) {
+//                            if (clientThread != null) {
+//                                if (!data.can_read()) {
+//                                    player_turn_text.setText("Player 2 Turn");
+//                                } else {
+//                                    player_turn_text.setText("Player 1 Turn");
+//                                }
+//                            } else if (serverThread != null) {
+//                                if (!data.can_read()) {
+//                                    player_turn_text.setText("Player 1 Turn");
+//                                } else {
+//                                    player_turn_text.setText("Player 2 Turn");
+//                                }
+//                            }
+//                        }
+                    }
                 });
             }
         }
     };
-
 
 
 }
