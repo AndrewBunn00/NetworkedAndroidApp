@@ -68,37 +68,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO: Clean up if interrupted
-    public final Runnable updateTextWithTime = new Runnable() {
-        Integer i = 0;
-
-        @Override
-        public void run() {
-            TextView output = findViewById(R.id.writeAnything);
-            while (true) {
-                i++;
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Need to use runOnUiThread to update UI, as main thread must do it
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Stuff that updates the UI
-                        output.setText(i.toString());
-                    }
-                });
-            }
-
-        }
-        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
-//        if (Thread.interrupted()) {
-//            System.out.println("Thread interrupted");
-//            break;
+//    public final Runnable updateTextWithTime = new Runnable() {
+//        Integer i = 0;
+//
+//        @Override
+//        public void run() {
+//            TextView output = findViewById(R.id.writeAnything);
+//            while (true) {
+//                i++;
+//                try {
+//                    sleep(1000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                // Need to use runOnUiThread to update UI, as main thread must do it
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // Stuff that updates the UI
+//                        output.setText(i.toString());
+//                    }
+//                });
+//            }
+//
 //        }
-    };
+//        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+////        if (Thread.interrupted()) {
+////            System.out.println("Thread interrupted");
+////            break;
+////        }
+//    };
 
 
     public void submitOnClick(View v) {
@@ -182,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
             layout.setLayoutParams(layoutParams);
 
             crosswordBoard.setY(-(windowHeight/8));
+
+            new Thread(updateGameView).start();
 
 
 
@@ -475,5 +477,71 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    // TODO: Clean up if interrupted
+    public final Runnable updateTextWithTime = new Runnable() {
+        Integer i = 0;
+        @Override
+        public void run() {
+            TextView output = findViewById(R.id.writeAnything);
+            while (true) {
+                i++;
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // Need to use runOnUiThread to update UI, as main thread must do it
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+                        output.setText(i.toString());
+                    }
+                });
+            }
+        }
+        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+//        if (Thread.interrupted()) {
+//            System.out.println("Thread interrupted");
+//            break;
+//        }
+    };
+
+
+
+    public final Runnable updateGameView = new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // Need to use runOnUiThread to update UI, as main thread must do it
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+//                        output.setText(i.toString());
+                        crosswordBoard.invalidate();
+                    }
+                });
+
+
+            }
+        }
+        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
+//        if (Thread.interrupted()) {
+//            System.out.println("Thread interrupted");
+//            break;
+//        }
+    };
+
+
 
 }
