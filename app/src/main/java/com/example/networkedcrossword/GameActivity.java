@@ -276,6 +276,12 @@ public class GameActivity extends AppCompatActivity {
     public void onClickEndTurn(View view) {
         System.out.println("END TURN");
 
+//        if(data.getRecievedUpdate()) {
+//            this.game.updateGame(data.correctlyGuessedWords);
+//            crosswordBoard.invalidate();
+//            data.setRecievedUpdate(false);
+//        }
+
         // update the game
         data.incrementTurn();
 
@@ -285,11 +291,7 @@ public class GameActivity extends AppCompatActivity {
 //        data.set_disable_button(true);
 
 
-        if(data.getRecievedUpdate()) {
-            this.game.updateGame(data.correctlyGuessedWords);
-            crosswordBoard.invalidate();
-            data.setRecievedUpdate(false);
-        }
+
     }
 
 

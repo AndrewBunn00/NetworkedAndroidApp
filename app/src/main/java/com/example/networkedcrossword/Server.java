@@ -83,6 +83,7 @@ public class Server {
             System.out.println("[] Server received: " + read + "\n");
             data.setDataOnly(read);
             data.setRecievedUpdate(true);
+            game.updateGame(data.correctlyGuessedWords);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
