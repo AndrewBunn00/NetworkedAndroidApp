@@ -75,7 +75,6 @@ public class GameActivity extends AppCompatActivity {
         promptView.setX(offset/2);
 
 
-
         this.data = (Data) getIntent().getSerializableExtra("data");
         this.game = (Game) getIntent().getSerializableExtra("game");
         this.networkData = (Data) getIntent().getSerializableExtra("dataServerOrClient");

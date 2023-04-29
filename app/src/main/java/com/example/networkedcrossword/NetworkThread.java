@@ -51,8 +51,6 @@ public class NetworkThread extends Thread {
             return;
         }
 
-//        System.out.println("Sending message: " + message + " to " + ip + ":" + port);
-
         // figure out whether we run server or client
         if(Objects.equals(serverOrClient, "Server")) {
             this.server = new Server(port, data);

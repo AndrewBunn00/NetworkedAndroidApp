@@ -52,53 +52,17 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout layout;
     GridView promptView;
 
-//    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        new Thread(updateTextWithTime).start();
+
         this.promptView = findViewById(R.id.promptView);
-//        this.promptView.setVisibility(View.INVISIBLE);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
 
         this.layout = findViewById(R.id.linLayout);
-//        this.layout.setVisibility(View.INVISIBLE);
         ((ViewGroup)layout.getParent()).removeView(layout);
     }
-
-    // TODO: Clean up if interrupted
-//    public final Runnable updateTextWithTime = new Runnable() {
-//        Integer i = 0;
-//
-//        @Override
-//        public void run() {
-//            TextView output = findViewById(R.id.writeAnything);
-//            while (true) {
-//                i++;
-//                try {
-//                    sleep(1000);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                // Need to use runOnUiThread to update UI, as main thread must do it
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // Stuff that updates the UI
-//                        output.setText(i.toString());
-//                    }
-//                });
-//            }
-//
-//        }
-//        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
-////        if (Thread.interrupted()) {
-////            System.out.println("Thread interrupted");
-////            break;
-////        }
-//    };
 
 
     public void submitOnClick(View v) {
@@ -108,10 +72,6 @@ public class MainActivity extends AppCompatActivity {
             TextView textBox = findViewById(R.id.writeAnything);
 //        output.setText("You touched me");
             String text = textBox.getText().toString();
-
-            // update with the recieved data
-//            HashMap<String, String> map = data.cleanUpDataString();
-//            data.updateData(map);
 
             // update the game
             data.incrementTurn();
@@ -126,19 +86,13 @@ public class MainActivity extends AppCompatActivity {
 
             if(this.clientThread != null) {
                 this.game = this.clientThread.assignClientGame(this.clientThread.client);
-//                intent.putExtra("game", this.clientThread.assignClientGame(this.clientThread.client));
-//                intent.putExtra("dataServerOrClient", clientThread.assignClientData());
-
             }
             else if(this.serverThread != null) {
                 this.game = this.serverThread.serverGame;
-//                intent.putExtra("game", this.serverThread.serverGame);
-//                intent.putExtra("dataServerOrClient", serverThread.assignServerData());
             }
 
-
             removeEverythingFromScreen(textBox);
-//
+
             // Screen size
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -154,11 +108,8 @@ public class MainActivity extends AppCompatActivity {
             Point navBarSize = getNavigationBarSize(this);
             int heightNavBar = navBarSize.y + offset;
 
-            // Readd the linLayout and the game
+            // Read the linLayout and the game
 
-////            ((ViewGroup)layout.getParent()).removeView(layout);
-////            ((ViewGroup)promptView.getParent()).removeView(promptView);
-//
             promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
 
             // Center the promptview at the bottom of the screen
@@ -167,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
             crosswordBoard = new CrosswordBoard(this);
             crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
 
-//        int promptHeight = windowHeight - heightSizeUpdated;
             promptView.setY(promptHeight);
             promptView.setX(offset/2);
 
@@ -184,11 +134,6 @@ public class MainActivity extends AppCompatActivity {
             crosswordBoard.setY(-(windowHeight/8));
 
             new Thread(updateGameView).start();
-
-
-
-
-
 
 
             ArrayList<ArrayList<String>> list = game.board_words;
@@ -282,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             promptView.setOnItemClickListener((adapterView, view, i, l) -> {
                 try {
                     clickIndex = i;
-//                System.out.println("right about show " + i);
                     dialogBox.show();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -355,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
     public void joinGame(View view) {
         data.set_isplayer1(false);
         TextView codeTextBox = findViewById(R.id.code);
-//        output.setText("You touched me");
         String text = codeTextBox.getText().toString();
 
         // Check that the code is the right length and alert if not
@@ -364,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // System.out.println("Joining server with code: " + text);
         int portNumber;
         try {
             portNumber = Integer.parseInt(text);
@@ -377,18 +319,10 @@ public class MainActivity extends AppCompatActivity {
         clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
         clientThread.start();
 
-
-        // create game state client, give it board and context
-
     }
 
     public void startGameButton(View view) {
         System.out.println("ENTERING GAME WINDOW");
-//        try {
-//            sleep(2000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
 
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("data", data);
@@ -457,58 +391,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickEndTurnMainActivity(View view) {
-        System.out.println("END TURN");
-
-//        if(data.getRecievedUpdate()) {
-//            this.game.updateGame(data.correctlyGuessedWords);
-//            crosswordBoard.invalidate();
-//            data.setRecievedUpdate(false);
-//        }
-
         // update the game
         data.incrementTurn();
 
         // prep the data for sending
         String msg = data.toJson();
         data.setData(msg, true);
-//        networkData.setCan_write(true);
-//        data.set_disable_button(true);
-        System.out.println("DONE WITH BUTTON");
-
-
     }
-
-
-    // TODO: Clean up if interrupted
-    public final Runnable updateTextWithTime = new Runnable() {
-        Integer i = 0;
-        @Override
-        public void run() {
-            TextView output = findViewById(R.id.writeAnything);
-            while (true) {
-                i++;
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                // Need to use runOnUiThread to update UI, as main thread must do it
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Stuff that updates the UI
-                        output.setText(i.toString());
-                    }
-                });
-            }
-        }
-        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
-//        if (Thread.interrupted()) {
-//            System.out.println("Thread interrupted");
-//            break;
-//        }
-    };
-
 
 
     public final Runnable updateGameView = new Runnable() {
@@ -521,25 +410,12 @@ public class MainActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
                 // Need to use runOnUiThread to update UI, as main thread must do it
-
-
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        // Stuff that updates the UI
-//                        output.setText(i.toString());
-                        crosswordBoard.invalidate();
-                    }
+                    public void run() { crosswordBoard.invalidate(); }
                 });
-
-
             }
         }
-        // Check if submit button hit, if so, stop the thread (will want later for timer possibly)
-//        if (Thread.interrupted()) {
-//            System.out.println("Thread interrupted");
-//            break;
-//        }
     };
 
 

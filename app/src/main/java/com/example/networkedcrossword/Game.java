@@ -21,15 +21,10 @@ public class Game implements Serializable {
     public ArrayList<ArrayList<String>> board_words;
     private String[][] boardSeed;
     private String[][] untouchedBoard;
-    public String[][] copyGameBoard;
 
     public int turn = 1;
 
-    public String[][] boardSolution;
-
     public boolean isServer = false;
-
-    public boolean assignedInClient = false;
 
     public Game(int dim, int seed){
         this.seed = seed;
@@ -102,8 +97,6 @@ public class Game implements Serializable {
     }
     public String[][] handleBoardStateUpdate(boolean[] solved, ArrayList<ArrayList<String>> words) {
 
-//        System.out.println(this.boardSeed);
-//        System.out.println(this.seed);
         String[][] updatedGameBoard = this.getBoard();
 
         for (int i = 0; i < solved.length; i++) {
@@ -149,9 +142,6 @@ public class Game implements Serializable {
         } else {
             this.turn = 1;
         }
-
-        // Update the board with the selected word
-
     }
 
     public void updateGame(boolean[] correctlyGuessedWords) {

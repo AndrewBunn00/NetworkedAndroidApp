@@ -43,7 +43,6 @@ public class CrosswordBoard extends View{
     public void setAttributes(int player, Game game, String[][] newBoard) {
         this.player = player;
         this.game = game;
-//        this.board = game.getBoard();
         this.board = newBoard;
         invalidate(); // force view to redraw itself
     }
@@ -65,6 +64,7 @@ public class CrosswordBoard extends View{
         // Set general style sizings
         int H1 = 70;
         int body = 50;
+
         // Draw here
         paint.setColor(Color.BLACK);
         StringBuilder sb = new StringBuilder();

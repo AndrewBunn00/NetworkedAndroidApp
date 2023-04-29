@@ -26,7 +26,6 @@ public class Data implements Serializable {
 
     private String boardStats = "";
 
-    public String[][] passedBoardState;
     public Set<String> guessedWords = new HashSet<>();
     public boolean[] correctlyGuessedWords = new boolean[10];
 
@@ -80,9 +79,6 @@ public class Data implements Serializable {
             return false;
         }
     }
-    public boolean complete() {
-        return (this.player1_score + this.player2_score) == (this.total_words) ;
-    }
 
     public void setScore() {
         if(this.turn == 0) {
@@ -98,9 +94,6 @@ public class Data implements Serializable {
     public String toJson() {
         HashMap<String, String> map = new HashMap<>();
 
-        // player:word
-//        String key = arg.split(":")[0];
-//        String value = arg.split(":")[1];
         map.put("player1_guess",this.player1_guess);
         map.put("player2_guess",this.player2_guess);
         map.put("player1_score", String.valueOf(this.player1_score));
@@ -114,7 +107,6 @@ public class Data implements Serializable {
 
 
         JSONObject json = new JSONObject(map);
-//        System.out.println("JSON: " + json);
         return json.toString();
 
     }
@@ -181,7 +173,6 @@ public class Data implements Serializable {
         }
 
         this.correctlyGuessedWords = correctlyGuessedWordsPlaceholder;
-
 
     }
 

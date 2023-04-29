@@ -1,12 +1,6 @@
 package com.example.networkedcrossword;
 
-// import java.io.DataOutputStream;
-// import java.io.IOException;
-// import java.net.ServerSocket;
-// import java.net.Socket;
 import static java.lang.Thread.sleep;
-
-import android.content.Context;
 
 import java.io.*;
 import java.net.*;
@@ -32,7 +26,6 @@ public class Server {
 
     public void serverStart() {
         System.out.println("Starting server\n");
-//        this.game.handleBoardStateUpdate();
         try {
             serverSocket = new ServerSocket(port);
             waitForClientConnection();
@@ -53,13 +46,10 @@ public class Server {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages(i);
                     data.setCan_write(false);
-//                    data.set_read_server(true);
                     data.set_read(true);
                 }
-                // if(data.can_read_server())
                 if(data.can_read()) {
                     receiveClientMessages();
-//                    data.set_read_server(false);
                     data.set_read(false);
                     data.set_disable_button(false);
                 }
@@ -72,9 +62,6 @@ public class Server {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        // Client connected, start listening for messages
-
     }
 
     private void receiveClientMessages() {
@@ -93,7 +80,6 @@ public class Server {
 
     private void sendClientMessages(int i) {
         try {
-//            writeOut.write("Hello from server " + data.getData() + "\n");
             writeOut.write(data.getData() + "\n");
             writeOut.flush();
         }
@@ -145,7 +131,6 @@ public class Server {
             catch (IOException e) {
                 throw new RuntimeException(e);
             }
-//            writeOut.println("Server received message: " + message);
             try {
                 message = readIn.readLine();
             } catch (IOException e) {

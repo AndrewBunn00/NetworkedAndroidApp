@@ -5,8 +5,6 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
-import android.content.Context;
-
 public class Client {
     Socket client;
     private int port;
@@ -15,7 +13,6 @@ public class Client {
     private BufferedReader readIn;
     private BufferedWriter writeOut;
     private Data data;
-    private Data old_data;
 
     public Game game;
 
@@ -51,19 +48,15 @@ public class Client {
             // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);
-                // if(data.can_read_client())
                 if(data.can_read()) {
                     receiveServerMessages();
-//                    data.set_read_client(false);
                     data.set_read(false);
                     data.set_disable_button(false);
                     data.set_isplayer1(true);
                 }
-//                sendServerMessages(i);
                 if(data.isCan_write()) {
                     sendServerMessages(i);
                     data.setCan_write(false);
-//                    data.set_read_client(true);
                     data.set_read(true);
                 }
                 i++;
@@ -76,11 +69,6 @@ public class Client {
             e.printStackTrace();
         }
 
-    }
-    public boolean data_diff() {
-        //compare values from old_data and data
-
-        return true;
     }
 
     private void receiveServerMessages() {
@@ -99,8 +87,6 @@ public class Client {
 
     private void sendServerMessages(int i) {
         try {
-//            writeOut.write("Hello from client " + data.getData() + "\n");
-//            writeOut.write("Hello from client " + data.getData() + "\n");
             writeOut.write(data.getData() + "\n");
             writeOut.flush();
         }
