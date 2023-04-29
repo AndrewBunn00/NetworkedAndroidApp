@@ -22,6 +22,8 @@ public class Data implements Serializable {
     private boolean disable_button = false;
     private boolean is_player1 = false;
 
+    private boolean endTurnHit = false;
+
     private boolean recievedUpdate = false;
 
     private String boardStats = "";
@@ -216,5 +218,13 @@ public class Data implements Serializable {
 
     public boolean getRecievedUpdate() {
         return this.recievedUpdate;
+    }
+
+    public void setEndTurnHit(boolean value) {
+        this.endTurnHit = value;
+    }
+
+    public boolean getEndTurnHit() {
+        return this.endTurnHit;
     }
 }

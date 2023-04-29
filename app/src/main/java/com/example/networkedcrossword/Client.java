@@ -53,6 +53,7 @@ public class Client {
                     data.set_read(false);
                     data.set_disable_button(false);
                     data.set_isplayer1(true);
+                    data.setEndTurnHit(false);
                 }
                 if(data.isCan_write()) {
                     sendServerMessages(i);

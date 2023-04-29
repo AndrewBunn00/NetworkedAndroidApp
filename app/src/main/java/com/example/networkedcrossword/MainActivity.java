@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void submitOnClick(View v) {
 
-
         if(threadCreated) {
 
             // update the game
@@ -77,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Send the string over! ");
 
             // prep the data for sending
-            String msg = data.toJson();
-            data.setData(msg, true);
+//            String msg = data.toJson();
+//            data.setData(msg, true);
             data.set_disable_button(true);
 
 
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             int heightNavBar = navBarSize.y + offset;
 
             // Read the linLayout and the game
-
             promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
 
             // Center the promptview at the bottom of the screen
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             new Thread(updateGameView).start();
 
-
+            // Button prompts
             ArrayList<ArrayList<String>> list = game.board_words;
             String[] wordsToAdd = new String[game.board_words.size()];
 
@@ -222,11 +220,13 @@ public class MainActivity extends AppCompatActivity {
             }).create();
 
             promptView.setOnItemClickListener((adapterView, view, i, l) -> {
-                try {
-                    clickIndex = i;
-                    dialogBox.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(!data.getEndTurnHit()) {
+                    try {
+                        clickIndex = i;
+                        dialogBox.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -311,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO: call client code here
             clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
             clientThread.start();
+            data.setEndTurnHit(true);
             threadCreated = true;
         }
     }
@@ -366,12 +367,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickEndTurnMainActivity(View view) {
-        // update the game
-        data.incrementTurn();
+        if(!data.getEndTurnHit()) {
+            System.out.println(":TURN AINT OVER");
+            // update the game
+            data.incrementTurn();
 
-        // prep the data for sending
-        String msg = data.toJson();
-        data.setData(msg, true);
+            // prep the data for sending
+            String msg = data.toJson();
+            data.setData(msg, true);
+            data.setEndTurnHit(true);
+        }
     }
 
 

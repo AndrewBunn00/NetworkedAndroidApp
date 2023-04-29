@@ -52,6 +52,7 @@ public class Server {
                     receiveClientMessages();
                     data.set_read(false);
                     data.set_disable_button(false);
+                    data.setEndTurnHit(false);
                 }
                 i++;
             }
