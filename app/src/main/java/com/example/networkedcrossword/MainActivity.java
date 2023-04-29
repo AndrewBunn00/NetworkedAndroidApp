@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             removeEverythingFromScreen();
-            player_turn_text = findViewById(R.id.player_turn);
+
 
             // Screen size
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-
         }
     }
 
@@ -414,22 +413,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         crosswordBoard.invalidate();
-
-//                        if(player_turn_text.getVisibility() == View.VISIBLE) {
-//                            if (clientThread != null) {
-//                                if (!data.can_read()) {
-//                                    player_turn_text.setText("Player 2 Turn");
-//                                } else {
-//                                    player_turn_text.setText("Player 1 Turn");
-//                                }
-//                            } else if (serverThread != null) {
-//                                if (!data.can_read()) {
-//                                    player_turn_text.setText("Player 1 Turn");
-//                                } else {
-//                                    player_turn_text.setText("Player 2 Turn");
-//                                }
-//                            }
-//                        }
+                        player_turn_text = findViewById(R.id.player_turn);
+                        System.out.println(player_turn_text);
+                        if(player_turn_text != null) {
+                            if (clientThread != null) {
+                                if (!data.can_read()) {
+                                    player_turn_text.setText("Player 2 Turn");
+                                } else {
+                                    player_turn_text.setText("Player 1 Turn");
+                                }
+                            } else if (serverThread != null) {
+                                if (!data.can_read()) {
+                                    player_turn_text.setText("Player 1 Turn");
+                                } else {
+                                    player_turn_text.setText("Player 2 Turn");
+                                }
+                            }
+                        }
                     }
                 });
             }
