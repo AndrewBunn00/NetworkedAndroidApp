@@ -267,6 +267,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Port number must be length 4", Toast.LENGTH_SHORT).show();
                 return;
             }
+            try {
+                int test = Integer.parseInt(text);
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Port number must be an integer");
+                return;
+            }
 
             System.out.println("Starting a server, on port number: " + text);
 
@@ -298,6 +305,13 @@ public class MainActivity extends AppCompatActivity {
             // Check that the code is the right length and alert if not
             if (text.length() != 4) {
                 Toast.makeText(this, "Port Number must be length 4 and Match server port", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                int test = Integer.parseInt(text);
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Port number must be an integer");
                 return;
             }
 
