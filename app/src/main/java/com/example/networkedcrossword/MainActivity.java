@@ -52,17 +52,25 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout layout;
     GridView promptView;
     TextView player_turn_text;
+    AlertDialog.Builder winbuilderPlayer;
+    AlertDialog winAlertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.promptView = findViewById(R.id.promptView);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
 
         this.layout = findViewById(R.id.linLayout);
         ((ViewGroup)layout.getParent()).removeView(layout);
+        winbuilderPlayer = new AlertDialog.Builder(this);
+        winAlertBuilder = winbuilderPlayer.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                System.out.println("");
+            }
+        }).create();
     }
 
 
@@ -197,11 +205,8 @@ public class MainActivity extends AppCompatActivity {
                                 data.guessedWords.add(checkIfGuessed);
                                 data.correctlyGuessedWords[clickIndex] = true;
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
+                                data.setPlayer1_score();
 //                                crosswordBoard.setAttributes(1, game, temp);
-//                                TextView playerTurn = findViewById(R.id.player_turn);
-//                                playerTurn.setText("Player 2 Turn");
-//                                TextView playerTurn = findViewById(R.id.player_turn);
-//                                playerTurn.setText("Player " + crosswordBoard.player + " turn");
                             } else {
                                 textInputEditText.setText("");
                             }
@@ -228,16 +233,14 @@ public class MainActivity extends AppCompatActivity {
                                 //player 1 is correct update the gameboard
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
 //                                crosswordBoard.setAttributes(2, game, temp);
-//                                TextView playerTurn = findViewById(R.id.player_turn);
-//                                playerTurn.setText("Player " + crosswordBoard.player + " turn");
-//                                TextView playerTurn = findViewById(R.id.player_turn);
-//                                playerTurn.setText("Player 1 Turn");
+                                data.setPlayer2_score();
                             } else {
                                 textInputEditText.setText("");
                             }
                         }
                         //update gameboard state to be passed server <-> client
                     }
+                    textInputEditText.setText("");
                 }
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -392,7 +395,6 @@ public class MainActivity extends AppCompatActivity {
     public void onClickEndTurnMainActivity(View view) {
         // update the game
         data.incrementTurn();
-
         // prep the data for sending
         String msg = data.toJson();
         data.setData(msg, true);
@@ -414,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         crosswordBoard.invalidate();
                         player_turn_text = findViewById(R.id.player_turn);
-                        System.out.println(player_turn_text);
+//                        System.out.println(player_turn_text);
                         if(player_turn_text != null) {
                             if (clientThread != null) {
                                 if (!data.can_read()) {
@@ -428,6 +430,26 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     player_turn_text.setText("Player 2 Turn");
                                 }
+                            }
+                        }
+
+                        int player1_score = data.getPlayer1_score();
+                        int player2_score = data.getPlayer2_score();
+                        if(data.checkWin() != -1) {
+                            //win has occured
+                            if(player1_score>player2_score) {
+                                //player 1 wins]
+
+                                winAlertBuilder.setTitle("player 1 wins");
+                                winAlertBuilder.show();
+                            } else if(player1_score<player2_score){
+                                //player 2 wins
+                                winAlertBuilder.setTitle("player 2 wins");
+                                winAlertBuilder.show();
+                            } else {
+                                //tie
+                                winAlertBuilder.setTitle("Tie");
+                                winAlertBuilder.show();
                             }
                         }
                     }
