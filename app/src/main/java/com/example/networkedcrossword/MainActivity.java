@@ -448,21 +448,41 @@ public class MainActivity extends AppCompatActivity {
                         int player2_score = data.getPlayer2_score();
                         if(data.checkWin() != -1) {
                             //win has occured
-                            if(player1_score>player2_score) {
-                                //player 1 wins]
-
-                                winAlertBuilder.setTitle("player 1 wins");
-                                winAlertBuilder.show();
-                            } else if(player1_score<player2_score){
+                            if(player1_score > player2_score) {
+                                //player 1 wins
+                                if(serverThread != null) {
+                                    if(data.getEndTurnHit()) {
+                                        winAlertBuilder.setTitle("player 1 wins");
+                                        winAlertBuilder.show();
+                                    }
+                                } else if (clientThread != null) {
+                                    winAlertBuilder.setTitle("player 1 wins");
+                                    winAlertBuilder.show();
+                                }
+                            } else if (player1_score < player2_score) {
                                 //player 2 wins
-                                winAlertBuilder.setTitle("player 2 wins");
-                                winAlertBuilder.show();
+                                if(clientThread != null) {
+                                    if(data.getEndTurnHit()) {
+                                        winAlertBuilder.setTitle("player 2 wins");
+                                        winAlertBuilder.show();
+                                    }
+                                } else if(serverThread != null){
+                                    winAlertBuilder.setTitle("player 2 wins");
+                                    winAlertBuilder.show();
+                                }
                             } else {
                                 //tie
-                                winAlertBuilder.setTitle("Tie");
-                                winAlertBuilder.show();
+                                if(clientThread != null) {
+                                    winAlertBuilder.setTitle("Tie");
+                                    winAlertBuilder.show();
+                                } else {
+                                    winAlertBuilder.setTitle("Tie");
+                                    winAlertBuilder.show();
+                                }
+
                             }
                         }
+
                     }
                 });
             }
