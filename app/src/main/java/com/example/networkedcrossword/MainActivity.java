@@ -216,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         //update gameboard state to be passed server <-> client
-
                     } else {
                         // player 2
                         playerTurnNum = 2;
@@ -515,16 +514,6 @@ public class MainActivity extends AppCompatActivity {
                                     winAlertBuilder.setTitle("player 2 wins");
                                     winAlertBuilder.show();
                                 }
-                            } else {
-                                //tie
-                                if(clientThread != null) {
-                                    winAlertBuilder.setTitle("Tie");
-                                    winAlertBuilder.show();
-                                } else {
-                                    winAlertBuilder.setTitle("Tie");
-                                    winAlertBuilder.show();
-                                }
-
                             }
                         }
 
