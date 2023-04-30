@@ -354,6 +354,7 @@ public class MainActivity extends AppCompatActivity {
             if(!clientThread.isAlive()) {
 
                 System.out.println("Client thread not alive");
+                Toast.makeText(this, "Server not started or wrong port number entered.", Toast.LENGTH_SHORT).show();
                 return;
             }
             data.setEndTurnHit(true);
