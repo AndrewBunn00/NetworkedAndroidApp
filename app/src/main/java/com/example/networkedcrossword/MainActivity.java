@@ -49,20 +49,29 @@ public class MainActivity extends AppCompatActivity {
     CrosswordBoard crosswordBoard;
     Game game;
     int clickIndex;
-
+    int playerTurnNum = 1;
     LinearLayout layout;
     GridView promptView;
+    TextView player_turn_text;
+    AlertDialog.Builder winbuilderPlayer;
+    AlertDialog winAlertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.promptView = findViewById(R.id.promptView);
         ((ViewGroup)promptView.getParent()).removeView(promptView);
 
         this.layout = findViewById(R.id.linLayout);
         ((ViewGroup)layout.getParent()).removeView(layout);
+        winbuilderPlayer = new AlertDialog.Builder(this);
+        winAlertBuilder = winbuilderPlayer.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                System.out.println("");
+            }
+        }).create();
     }
 
 
@@ -81,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
             data.set_disable_button(true);
 
 
-            if(this.clientThread != null) {
+            if (this.clientThread != null) {
                 this.game = this.clientThread.assignClientGame(this.clientThread.client);
-            }
-            else if(this.serverThread != null) {
+            } else if (this.serverThread != null) {
                 this.game = this.serverThread.serverGame;
             }
 
             removeEverythingFromScreen();
+
 
             // Screen size
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -100,11 +109,16 @@ public class MainActivity extends AppCompatActivity {
             // dimensions and offsets for prompt
             int size = min(windowHeight, windowWidth);
             int sizeUpdated = size - offset;
-            int heightSizeUpdated = size/3 - offset;
+            int heightSizeUpdated = size / 3 - offset;
 
             Point navBarSize = getNavigationBarSize(this);
             int heightNavBar = navBarSize.y + offset;
+            System.out.println(android.os.Build.MODEL);
+            if (android.os.Build.MODEL.equals("sdk_gphone_x86_64")) {
+                heightNavBar = 400;
+            }
 
+            System.out.println("[HeightNavBar] " + heightNavBar + " [sizeUpdated] " + sizeUpdated);
             // Read the linLayout and the game
             promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
 
@@ -115,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
 
             promptView.setY(promptHeight);
-            promptView.setX(offset/2);
+            promptView.setX(offset / 2);
 
             layout.addView(promptView);
             layout.addView(crosswordBoard);
@@ -127,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             layoutParams.width = windowWidth;
             layout.setLayoutParams(layoutParams);
 
-            crosswordBoard.setY(-(windowHeight/8));
+            crosswordBoard.setY(-(windowHeight / 8));
 
             new Thread(updateGameView).start();
 
@@ -136,12 +150,12 @@ public class MainActivity extends AppCompatActivity {
             String[] wordsToAdd = new String[game.board_words.size()];
 
             for (int i = 0; i < list.size(); i++) {
-                wordsToAdd[i] = list.get(i).get(0)+
-                        ""+
-                        list.get(i).get(1)+
+                wordsToAdd[i] = list.get(i).get(0) +
+                        "" +
+                        list.get(i).get(1) +
 //                            ""+
 //                            list.get(i).get(2)+
-                        " "+
+                        " " +
                         list.get(i).get(3);
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordsToAdd);
@@ -160,25 +174,27 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //check flag to see whose turn
-                    if(game.isServer) {
+                    if (game.isServer) {
                         //player 1
+                        playerTurnNum = 1;
                         //check to see if word has been guessed
-                        System.out.println("[onClick index value] "+ clickIndex);
+                        System.out.println("[onClick index value] " + clickIndex);
                         ArrayList<String> parts = list.get(clickIndex);
-                        String checkIfGuessed = parts.get(0)+parts.get(1);
+                        String checkIfGuessed = parts.get(0) + parts.get(1);
                         System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                         String[][] temp;
                         System.out.println("SET CONTAINS " + data.guessedWords.contains(checkIfGuessed));
-                        if(!data.guessedWords.contains(checkIfGuessed)) {
+                        if (!data.guessedWords.contains(checkIfGuessed)) {
                             //check to see if word matches correctly
                             String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
-                            if(guess.equals(parts.get(2).toUpperCase())) {
+                            if (guess.equals(parts.get(2).toUpperCase())) {
                                 //player 1 is correct update the gameboard
                                 System.out.println("[Player 1 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                                 data.guessedWords.add(checkIfGuessed);
                                 data.correctlyGuessedWords[clickIndex] = true;
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
-                                crosswordBoard.setAttributes(1, game, temp);
+                                data.setPlayer1_score();
+//                                crosswordBoard.setAttributes(1, game, temp);
                             } else {
                                 textInputEditText.setText("");
                             }
@@ -187,28 +203,31 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         // player 2
+                        playerTurnNum = 2;
                         //check to see if word has been guessed
                         System.out.println("[onClick index value] " + clickIndex);
                         ArrayList<String> parts = list.get(clickIndex);
-                        String checkIfGuessed = parts.get(0)+parts.get(1);
+                        String checkIfGuessed = parts.get(0) + parts.get(1);
                         System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                         String[][] temp;
-                        if(!data.guessedWords.contains(checkIfGuessed)) {
+                        if (!data.guessedWords.contains(checkIfGuessed)) {
                             //check to see if word matches correctly
                             //check to see if word matches correctly
                             String guess = String.valueOf(textInputEditText.getText()).toUpperCase();
-                            if(guess.equals(parts.get(2).toUpperCase())) {
+                            if (guess.equals(parts.get(2).toUpperCase())) {
                                 System.out.println("[Player 2 Guessed Correctly] " + textInputEditText.getText() + " == " + parts.get(2));
                                 data.guessedWords.add(checkIfGuessed);
                                 data.correctlyGuessedWords[clickIndex] = true;
                                 //player 1 is correct update the gameboard
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
-                                crosswordBoard.setAttributes(2, game, temp);
+//                                crosswordBoard.setAttributes(2, game, temp);
+                                data.setPlayer2_score();
                             } else {
                                 textInputEditText.setText("");
                             }
                         }
                     }
+                    textInputEditText.setText("");
                 }
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -231,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-
     }
 
     private void removeEverythingFromScreen() {
@@ -406,12 +424,50 @@ public class MainActivity extends AppCompatActivity {
                 // Need to use runOnUiThread to update UI, as main thread must do it
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() { crosswordBoard.invalidate(); }
+                    public void run() {
+                        crosswordBoard.invalidate();
+                        player_turn_text = findViewById(R.id.player_turn);
+//                        System.out.println(player_turn_text);
+                        if(player_turn_text != null) {
+                            if (clientThread != null) {
+                                if (!data.can_read()) {
+                                    player_turn_text.setText("Player 2 Turn");
+                                } else {
+                                    player_turn_text.setText("Player 1 Turn");
+                                }
+                            } else if (serverThread != null) {
+                                if (!data.can_read()) {
+                                    player_turn_text.setText("Player 1 Turn");
+                                } else {
+                                    player_turn_text.setText("Player 2 Turn");
+                                }
+                            }
+                        }
+
+                        int player1_score = data.getPlayer1_score();
+                        int player2_score = data.getPlayer2_score();
+                        if(data.checkWin() != -1) {
+                            //win has occured
+                            if(player1_score>player2_score) {
+                                //player 1 wins]
+
+                                winAlertBuilder.setTitle("player 1 wins");
+                                winAlertBuilder.show();
+                            } else if(player1_score<player2_score){
+                                //player 2 wins
+                                winAlertBuilder.setTitle("player 2 wins");
+                                winAlertBuilder.show();
+                            } else {
+                                //tie
+                                winAlertBuilder.setTitle("Tie");
+                                winAlertBuilder.show();
+                            }
+                        }
+                    }
                 });
             }
         }
     };
-
 
 
 }
