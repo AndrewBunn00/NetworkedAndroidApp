@@ -83,14 +83,22 @@ public class Data implements Serializable {
     }
 
     public void setPlayer1_score(){
+        if((this.player1_score + this.player2_score) == 9) {
+            this.player1_score +=2;
+            return;
+        }
         this.player1_score++;
     }
     public void setPlayer2_score(){
+        if((this.player1_score + this.player2_score) == 9) {
+            this.player2_score +=2;
+            return;
+        }
         this.player2_score++;
     }
 
     public int checkWin(){
-        if((this.player1_score + this.player2_score) != 10) {
+        if((this.player1_score + this.player2_score) != 11) {
             return -1;
         }
         return (this.player1_score>this.player2_score) ? 1 : 2;
