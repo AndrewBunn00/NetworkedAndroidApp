@@ -216,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         //update gameboard state to be passed server <-> client
-
                     } else {
                         // player 2
                         playerTurnNum = 2;
