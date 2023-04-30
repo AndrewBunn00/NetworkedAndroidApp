@@ -105,7 +105,10 @@ Group Contributions:
 - Raj:
 
 - Derek:
-
+    Created part of the Game class which and rendering in the board based on the seed.
+    Created the CrosswordBoard view specifically the board generation which uses a canvas and 2d graphics to generate the board.
+    Worked on getting the network thread to communicate with the game activity and subsequent crosswordboard view.
+    
 - Joel:
 
 - Vlad:
