@@ -70,7 +70,22 @@ public class MainActivity extends AppCompatActivity {
         winAlertBuilder = winbuilderPlayer.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                System.out.println("");
+                System.out.println("SUBMIT CLICKED");
+                if(serverThread != null) {
+//                    serverThread.interrupt();
+                    data.stopThread = true;
+                    serverThread = null;
+                } else if(clientThread != null) {
+//                    clientThread.interrupt();
+                    data.stopThread = true;
+                    clientThread = null;
+                }
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                recreate();
             }
         }).create();
     }
@@ -347,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
             // Current fix, sleep so thread has time to start and check if it should die
             // (could put in runnable and check every so often instead)
             try {
-                sleep(350);
+                sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -423,20 +438,20 @@ public class MainActivity extends AppCompatActivity {
             String msg = data.toJson();
             data.setData(msg, true);
             data.setEndTurnHit(true);
-            count++;
-            if(count >= 3) {
-//                finish();
-                if(serverThread != null) {
-//                    serverThread.interrupt();
-                    data.stopThread = true;
-                    serverThread = null;
-                } else if(clientThread != null) {
-//                    clientThread.interrupt();
-                    data.stopThread = true;
-                    clientThread = null;
-                }
-                recreate();
-            }
+//            count++;
+//            if(count >= 3) {
+////                finish();
+//                if(serverThread != null) {
+////                    serverThread.interrupt();
+//                    data.stopThread = true;
+//                    serverThread = null;
+//                } else if(clientThread != null) {
+////                    clientThread.interrupt();
+//                    data.stopThread = true;
+//                    clientThread = null;
+//                }
+//                recreate();
+//            }
         }
 
     }

@@ -54,9 +54,9 @@ public class Data implements Serializable {
         HashMap<String, String> map = this.cleanUpDataString(theData);
 
         // Update the data
-        this.updateData(map);
-
-//        this.data = data;
+        if(map != null) {
+            this.updateData(map);
+        }
     }
 
 
@@ -134,6 +134,9 @@ public class Data implements Serializable {
      * @return
      */
     public HashMap<String, String> cleanUpDataString(String theData) {
+        if(theData == null) {
+            return null;
+        }
         String[] partialSplit = theData.split(",");
         String[] values;
         HashMap<String, String> map = new HashMap<>();
