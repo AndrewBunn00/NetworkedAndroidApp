@@ -26,6 +26,8 @@ public class Data implements Serializable {
 
     private boolean recievedUpdate = false;
 
+    public boolean stopThread = false;
+
     private String boardStats = "";
 
     public Set<String> guessedWords = new HashSet<>();

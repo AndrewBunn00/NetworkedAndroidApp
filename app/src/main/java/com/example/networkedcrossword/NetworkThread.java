@@ -17,6 +17,8 @@ public class NetworkThread extends Thread {
     public Game clientGame;
     public Game serverGame;
 
+//    public boolean stop = false;
+
 
     // Constructor
     public NetworkThread(String serverOrClient, String message, String ip,

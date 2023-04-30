@@ -42,11 +42,17 @@ public class Server {
             // SEND RECIEVE
             while(true) {
                 sleep(1000);
+
+
                 if(data.isCan_write()) {
                     System.out.println("INSIDE CAN WRITE FLAG SERVER");
                     sendClientMessages(i);
                     data.setCan_write(false);
                     data.set_read(true);
+                }
+                if(data.stopThread) {
+                    System.out.println("STOPPING THREAD");
+                    break;
                 }
                 if(data.can_read()) {
                     receiveClientMessages();
@@ -54,8 +60,10 @@ public class Server {
                     data.set_disable_button(false);
                     data.setEndTurnHit(false);
                 }
+
                 i++;
             }
+            serverSocket.close();
 
         }
         catch (IOException e) {

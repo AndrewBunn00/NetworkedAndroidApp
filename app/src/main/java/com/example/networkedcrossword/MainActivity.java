@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
     private boolean threadCreated = false;
+    private int count;
 
     CrosswordBoard crosswordBoard;
     Game game;
@@ -422,7 +423,22 @@ public class MainActivity extends AppCompatActivity {
             String msg = data.toJson();
             data.setData(msg, true);
             data.setEndTurnHit(true);
+            count++;
+            if(count >= 3) {
+//                finish();
+                if(serverThread != null) {
+//                    serverThread.interrupt();
+                    data.stopThread = true;
+                    serverThread = null;
+                } else if(clientThread != null) {
+//                    clientThread.interrupt();
+                    data.stopThread = true;
+                    clientThread = null;
+                }
+                recreate();
+            }
         }
+
     }
 
 
