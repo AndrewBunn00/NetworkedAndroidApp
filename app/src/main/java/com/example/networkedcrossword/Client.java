@@ -27,7 +27,7 @@ public class Client {
 
     public Game clientGame() {return this.game;}
 
-    public void clientStart() {
+    public int clientStart() {
         System.out.println("Starting client\n");
 
         try {
@@ -40,6 +40,13 @@ public class Client {
 
             // read the boardstats from the server FIRST READ ONLY
             String boardStats = readIn.readLine();
+            // if the server is not up yet, boardStats will be null, return
+            if(boardStats == null) {
+                System.out.println("Call to read returned null, server not up yet");
+                client.close();
+                return -1;
+
+            }
             data.setBoardStats(boardStats);
             String[] split = data.getBoardStats().split(",");
             int dim = Integer.parseInt(split[0]);
@@ -71,7 +78,7 @@ public class Client {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        return 0;
     }
 
     private void receiveServerMessages() {

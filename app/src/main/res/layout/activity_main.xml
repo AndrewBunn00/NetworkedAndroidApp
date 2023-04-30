@@ -30,7 +30,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.569">
+        app:layout_constraintVertical_bias="0.691">
 
         <Button
             android:id="@+id/endTurnButton"
@@ -51,13 +51,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="submitOnClick"
-        android:text="Submit"
+        android:text="Start Game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.537"
         tools:ignore="HardcodedText" />
 
     <TextView

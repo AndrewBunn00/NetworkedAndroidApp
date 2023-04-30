@@ -60,7 +60,12 @@ public class NetworkThread extends Thread {
         else if(Objects.equals(serverOrClient, "Client")) {
             this.client = new Client(ip, port, message, data);
 
-            client.clientStart();
+            int code = client.clientStart();
+            if(code == -1) {
+                System.out.println("Server not up yet NETWORK THREAD");
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
         else {
             System.out.println("Need to give string \"Server\" or \"Client\"");

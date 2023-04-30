@@ -343,6 +343,19 @@ public class MainActivity extends AppCompatActivity {
             // TODO: call client code here
             clientThread = new NetworkThread("Client", text, "10.0.2.2", portNumber, data);
             clientThread.start();
+            // Current fix, sleep so thread has time to start and check if it should die
+            // (could put in runnable and check every so often instead)
+            try {
+                sleep(350);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            // if thread is not alive, then it died and we should not continue
+            if(!clientThread.isAlive()) {
+
+                System.out.println("Client thread not alive");
+                return;
+            }
             data.setEndTurnHit(true);
             threadCreated = true;
         }
