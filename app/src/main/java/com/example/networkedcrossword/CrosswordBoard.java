@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -28,7 +29,7 @@ import java.util.Arrays;
 import java.util.zip.Inflater;
 
 public class CrosswordBoard extends View{
-    private int player;
+    public int player;
     private Game game;
     private Paint paint = new Paint();
     private int originX = 0;
@@ -50,6 +51,9 @@ public class CrosswordBoard extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+//        TextView playerTurn = findViewById(R.id.player_turn);
+//        String turn = "Player " + this.player + " turn";
+//        playerTurn.setText(turn);
 
         // Set spatial dimensions
         // Basically padding to prevent running off screen
@@ -68,11 +72,11 @@ public class CrosswordBoard extends View{
         // Draw here
         paint.setColor(Color.BLACK);
         StringBuilder sb = new StringBuilder();
-        if(game.turn == this.player) {
-            paint.setTextSize(H1);
-            sb.append("Your Turn");
-            canvas.drawText(sb.toString(),distanceX/2-70, originY, paint);
-        }
+//        if(game.turn == this.player) {
+//            paint.setTextSize(H1);
+//            sb.append("Your Turn");
+//            canvas.drawText(sb.toString(),distanceX/2-70, originY, paint);
+//        }
 
         // Reset string builder and set a new string
         sb.setLength(0);

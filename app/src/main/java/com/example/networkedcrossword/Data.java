@@ -82,6 +82,19 @@ public class Data implements Serializable {
         }
     }
 
+    public void setPlayer1_score(){
+        this.player1_score++;
+    }
+    public void setPlayer2_score(){
+        this.player2_score++;
+    }
+
+    public int checkWin(){
+        if((this.player1_score + this.player2_score) != 10) {
+            return -1;
+        }
+        return (this.player1_score>this.player2_score) ? 1 : 2;
+    }
     public void setScore() {
         if(this.turn == 0) {
             //player 1
@@ -177,7 +190,12 @@ public class Data implements Serializable {
         this.correctlyGuessedWords = correctlyGuessedWordsPlaceholder;
 
     }
-
+    public int getPlayer1_score(){
+        return this.player1_score;
+    }
+    public int getPlayer2_score(){
+        return this.player2_score;
+    }
     public void incrementTurn() {
         this.turn++;
     }
