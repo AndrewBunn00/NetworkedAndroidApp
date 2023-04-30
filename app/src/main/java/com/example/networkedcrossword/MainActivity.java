@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Enter Guess");
 
             TextInputLayout input = new TextInputLayout(this);
-            input.setHint("Click to enter");
 
             TextInputEditText textInputEditText = new TextInputEditText(this);
             input.addView(textInputEditText);
