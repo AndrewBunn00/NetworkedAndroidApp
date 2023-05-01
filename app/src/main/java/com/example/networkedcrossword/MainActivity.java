@@ -70,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
         winAlertBuilder = winbuilderPlayer.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                endTurnFunctionality();
+                try {
+                    sleep(250);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 System.out.println("SUBMIT CLICKED");
                 if(serverThread != null) {
 //                    serverThread.interrupt();
@@ -428,6 +435,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickEndTurnMainActivity(View view) {
+//        if(!data.getEndTurnHit()) {
+////            System.out.println(":TURN AINT OVER");
+////            // update the game
+////            data.incrementTurn();
+////
+////            // prep the data for sending
+////            String msg = data.toJson();
+////            data.setData(msg, true);
+////            data.setEndTurnHit(true);
+////            count++;
+////            if(count >= 3) {
+//////                finish();
+////                if(serverThread != null) {
+//////                    serverThread.interrupt();
+////                    data.stopThread = true;
+////                    serverThread = null;
+////                } else if(clientThread != null) {
+//////                    clientThread.interrupt();
+////                    data.stopThread = true;
+////                    clientThread = null;
+////                }
+////                recreate();
+////            }
+//        }
+
+        endTurnFunctionality();
+
+    }
+
+    public void endTurnFunctionality() {
         if(!data.getEndTurnHit()) {
             System.out.println(":TURN AINT OVER");
             // update the game
@@ -452,7 +489,6 @@ public class MainActivity extends AppCompatActivity {
 //                recreate();
 //            }
         }
-
     }
 
 
@@ -495,10 +531,10 @@ public class MainActivity extends AppCompatActivity {
                             if(player1_score > player2_score) {
                                 //player 1 wins
                                 if(serverThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 1 wins");
-                                        winAlertBuilder.show();
-                                    }
+//                                    if(data.getEndTurnHit()) {
+                                    winAlertBuilder.setTitle("player 1 wins");
+                                    winAlertBuilder.show();
+//                                    }
                                 } else if (clientThread != null) {
                                     winAlertBuilder.setTitle("player 1 wins");
                                     winAlertBuilder.show();
@@ -506,10 +542,10 @@ public class MainActivity extends AppCompatActivity {
                             } else if (player1_score < player2_score) {
                                 //player 2 wins
                                 if(clientThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 2 wins");
-                                        winAlertBuilder.show();
-                                    }
+//                                    if(data.getEndTurnHit()) {
+                                    winAlertBuilder.setTitle("player 2 wins");
+                                    winAlertBuilder.show();
+//                                    }
                                 } else if(serverThread != null){
                                     winAlertBuilder.setTitle("player 2 wins");
                                     winAlertBuilder.show();
