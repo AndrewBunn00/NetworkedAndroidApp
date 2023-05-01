@@ -122,10 +122,12 @@ Group Contributions:
     Pair Programmed handling of changing player states to show correct turns.
     Worked on logic for wins and correct words pair programmed with Raj.
     Handled player score tracking to indicate wins.
+
 - Vlad:
     Set up project styling themes and colors. Fixed bugs with alignment and positioning.
-    Assisted Derek with game board generation and proper display.
-    Bug testing for game state and establishing connection between emulators.
+    Pair programmed with Derek on crossword board generation and proper display.
+    Assisted Andrew on handling UI changes for home screen.
+    Bug testing for game state and UI changes for two connected emulators.
 
 Notes:
 - If the back button or home button is hit, the app will restart resulting in undefined behavior.
