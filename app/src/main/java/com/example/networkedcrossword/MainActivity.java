@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private int seed = (int) (Math.random() * 3) + 1;
     public boolean isPlayer2 = false;
     private boolean threadCreated = false;
+    private int count;
 
     CrosswordBoard crosswordBoard;
     Game game;
@@ -69,7 +70,22 @@ public class MainActivity extends AppCompatActivity {
         winAlertBuilder = winbuilderPlayer.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                System.out.println("");
+                System.out.println("SUBMIT CLICKED");
+                if(serverThread != null) {
+//                    serverThread.interrupt();
+                    data.stopThread = true;
+                    serverThread = null;
+                } else if(clientThread != null) {
+//                    clientThread.interrupt();
+                    data.stopThread = true;
+                    clientThread = null;
+                }
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                recreate();
             }
         }).create();
     }
@@ -194,12 +210,17 @@ public class MainActivity extends AppCompatActivity {
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
                                 data.setPlayer1_score();
 //                                crosswordBoard.setAttributes(1, game, temp);
+                                data.incrementTurn();
+
+                                // prep the data for sending
+                                String msg = data.toJson();
+                                data.setData(msg, true);
+                                data.setEndTurnHit(true);
                             } else {
                                 textInputEditText.setText("");
                             }
                         }
                         //update gameboard state to be passed server <-> client
-
                     } else {
                         // player 2
                         playerTurnNum = 2;
@@ -221,6 +242,13 @@ public class MainActivity extends AppCompatActivity {
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
 //                                crosswordBoard.setAttributes(2, game, temp);
                                 data.setPlayer2_score();
+                                data.incrementTurn();
+
+                                // prep the data for sending
+                                String msg = data.toJson();
+                                data.setData(msg, true);
+                                data.setEndTurnHit(true);
+//                                onClickEndTurnMainActivity();
                             } else {
                                 textInputEditText.setText("");
                             }
@@ -345,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
             // Current fix, sleep so thread has time to start and check if it should die
             // (could put in runnable and check every so often instead)
             try {
-                sleep(350);
+                sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -421,7 +449,22 @@ public class MainActivity extends AppCompatActivity {
             String msg = data.toJson();
             data.setData(msg, true);
             data.setEndTurnHit(true);
+//            count++;
+//            if(count >= 3) {
+////                finish();
+//                if(serverThread != null) {
+////                    serverThread.interrupt();
+//                    data.stopThread = true;
+//                    serverThread = null;
+//                } else if(clientThread != null) {
+////                    clientThread.interrupt();
+//                    data.stopThread = true;
+//                    clientThread = null;
+//                }
+//                recreate();
+//            }
         }
+
     }
 
 
@@ -464,10 +507,8 @@ public class MainActivity extends AppCompatActivity {
                             if(player1_score > player2_score) {
                                 //player 1 wins
                                 if(serverThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 1 wins");
-                                        winAlertBuilder.show();
-                                    }
+                                    winAlertBuilder.setTitle("player 1 wins");
+                                    winAlertBuilder.show();
                                 } else if (clientThread != null) {
                                     winAlertBuilder.setTitle("player 1 wins");
                                     winAlertBuilder.show();
@@ -475,10 +516,8 @@ public class MainActivity extends AppCompatActivity {
                             } else if (player1_score < player2_score) {
                                 //player 2 wins
                                 if(clientThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 2 wins");
-                                        winAlertBuilder.show();
-                                    }
+                                    winAlertBuilder.setTitle("player 2 wins");
+                                    winAlertBuilder.show();
                                 } else if(serverThread != null){
                                     winAlertBuilder.setTitle("player 2 wins");
                                     winAlertBuilder.show();

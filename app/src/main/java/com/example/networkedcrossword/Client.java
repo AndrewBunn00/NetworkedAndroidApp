@@ -57,6 +57,12 @@ public class Client {
             // Read lines from the server RECIEVE SEND
             while (true) {
                 sleep(1000);
+
+                if(data.stopThread) {
+                    System.out.println("STOPPING THREAD");
+//                    client.close();
+                    break;
+                }
                 if(data.can_read()) {
                     receiveServerMessages();
                     data.set_read(false);
@@ -69,9 +75,10 @@ public class Client {
                     data.setCan_write(false);
                     data.set_read(true);
                 }
+
                 i++;
             }
-//            client.close();
+            client.close();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
