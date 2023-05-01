@@ -134,3 +134,8 @@ Notes:
 Android phones do this by default, restarting the app when it is left. So if this happens, please
 restart both runs of the app.
 - Best way to connect two emulators is to duplicate the first one using the Device manager.
+- We left the app only able to run between emulators, as we did not have android devices to test on.
+We are not allowing users to specify the IP of the device they want to join on at the moment, as we
+could not test it. Not sure how this affects the executable (APK), but it more than likely would not
+be able to connect to another real device. Only a simple change would be needed, which is specifying
+the IP, but as we could not test it, we did not want to include an untested feature.
