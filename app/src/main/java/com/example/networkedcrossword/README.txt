@@ -109,6 +109,9 @@ Group Contributions:
 - Joel:
 
 - Vlad:
+    Set up project styling themes and colors. Fixed bugs with alignment and positioning.
+    Assisted Derek with game board generation and proper display.
+    Bug testing for game state and establishing connection between emulators.
 
 Notes:
 - If the back button or home button is hit, the app will restart resulting in undefined behavior.
