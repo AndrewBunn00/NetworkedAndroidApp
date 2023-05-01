@@ -106,6 +106,11 @@ Group Contributions:
     Handled updating the UI for switching between connection and game screen.
 
 - Raj:
+    Generated words and hint pairs for crossword board generation (Dict class).
+    Handled player states changing between each turn (Pair programmed with Joel).
+    Generated ui grid to show hints that are paired to words with ontouch events.
+    Handled logic for both players if they enter incorrect/correct words
+    and getting UI notification to show on win cases (Pair programmed with Joel).
 
 - Derek:
     Created part of the Game class which and rendering in the board based on the seed.
@@ -113,8 +118,14 @@ Group Contributions:
     Worked on getting the network thread to communicate with the game activity and subsequent crossword board view.
     
 - Joel:
-
+    Worked with Andrew to create Server/Client connection between devices.
+    Pair Programmed handling of changing player states to show correct turns.
+    Worked on logic for wins and correct words pair programmed with Raj.
+    Handled player score tracking to indicate wins.
 - Vlad:
+    Set up project styling themes and colors. Fixed bugs with alignment and positioning.
+    Assisted Derek with game board generation and proper display.
+    Bug testing for game state and establishing connection between emulators.
 
 Notes:
 - If the back button or home button is hit, the app will restart resulting in undefined behavior.
