@@ -28,7 +28,7 @@ Adding Another Run Config:
 
 Connecting two emulators:
 - Enable telnet in the control panel (for Windows)
-- Run both emulators in the ide (server on is on 10.0.2.15 & client on 10.0.2.2, it is coded to be this way)
+- Run both emulators in the ide (server is on 10.0.2.15 & client on 10.0.2.2, it is coded to be this way)
 - FOR LATER: the server should connect on port 4000 and the client should connect on port 6000 (this
 is necessary for some of the weirdness associated with connecting the emulators as opposed to two real devices)
 
@@ -107,7 +107,7 @@ Group Contributions:
 - Derek:
     Created part of the Game class which and rendering in the board based on the seed.
     Created the CrosswordBoard view specifically the board generation which uses a canvas and 2d graphics to generate the board.
-    Worked on getting the network thread to communicate with the game activity and subsequent crosswordboard view.
+    Worked on getting the network thread to communicate with the game activity and subsequent crossword board view.
     
 - Joel:
 
