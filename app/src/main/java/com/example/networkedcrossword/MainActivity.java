@@ -211,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
                                 data.setPlayer1_score();
 //                                crosswordBoard.setAttributes(1, game, temp);
+                                data.incrementTurn();
+
+                                // prep the data for sending
+                                String msg = data.toJson();
+                                data.setData(msg, true);
+                                data.setEndTurnHit(true);
                             } else {
                                 textInputEditText.setText("");
                             }
@@ -237,6 +243,13 @@ public class MainActivity extends AppCompatActivity {
                                 temp = game.handleBoardStateUpdate(data.correctlyGuessedWords, list);
 //                                crosswordBoard.setAttributes(2, game, temp);
                                 data.setPlayer2_score();
+                                data.incrementTurn();
+
+                                // prep the data for sending
+                                String msg = data.toJson();
+                                data.setData(msg, true);
+                                data.setEndTurnHit(true);
+//                                onClickEndTurnMainActivity();
                             } else {
                                 textInputEditText.setText("");
                             }
@@ -495,10 +508,8 @@ public class MainActivity extends AppCompatActivity {
                             if(player1_score > player2_score) {
                                 //player 1 wins
                                 if(serverThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 1 wins");
-                                        winAlertBuilder.show();
-                                    }
+                                    winAlertBuilder.setTitle("player 1 wins");
+                                    winAlertBuilder.show();
                                 } else if (clientThread != null) {
                                     winAlertBuilder.setTitle("player 1 wins");
                                     winAlertBuilder.show();
@@ -506,10 +517,8 @@ public class MainActivity extends AppCompatActivity {
                             } else if (player1_score < player2_score) {
                                 //player 2 wins
                                 if(clientThread != null) {
-                                    if(data.getEndTurnHit()) {
-                                        winAlertBuilder.setTitle("player 2 wins");
-                                        winAlertBuilder.show();
-                                    }
+                                    winAlertBuilder.setTitle("player 2 wins");
+                                    winAlertBuilder.show();
                                 } else if(serverThread != null){
                                     winAlertBuilder.setTitle("player 2 wins");
                                     winAlertBuilder.show();
