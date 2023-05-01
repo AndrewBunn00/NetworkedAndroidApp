@@ -133,3 +133,4 @@ Notes:
 - If the back button or home button is hit, the app will restart resulting in undefined behavior.
 Android phones do this by default, restarting the app when it is left. So if this happens, please
 restart both runs of the app.
+- Best way to connect two emulators is to duplicate the first one using the Device manager.
