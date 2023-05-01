@@ -125,13 +125,15 @@ public class MainActivity extends AppCompatActivity {
             // dimensions and offsets for prompt
             int size = min(windowHeight, windowWidth);
             int sizeUpdated = size - offset;
-            int heightSizeUpdated = size / 3 - offset;
+            int heightSizeUpdated = size/3 - offset;
+            int heightSizeUpdatedForPos = size/2 - offset*3;
 
             Point navBarSize = getNavigationBarSize(this);
             int heightNavBar = navBarSize.y + offset;
             System.out.println(android.os.Build.MODEL);
             if (android.os.Build.MODEL.equals("sdk_gphone_x86_64")) {
                 heightNavBar = 400;
+                heightSizeUpdatedForPos = size * 2;
             }
 
             System.out.println("[HeightNavBar] " + heightNavBar + " [sizeUpdated] " + sizeUpdated);
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             promptView.setLayoutParams(new ViewGroup.LayoutParams(sizeUpdated, heightSizeUpdated));
 
             // Center the promptview at the bottom of the screen
-            int promptHeight = windowHeight - heightSizeUpdated - heightNavBar;
+            int promptHeight = windowHeight - heightSizeUpdatedForPos - heightNavBar;
 
             crosswordBoard = new CrosswordBoard(this);
             crosswordBoard.setAttributes(game.isServer ? 1 : 2, game, game.getBoard());
@@ -390,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    // Code below from https://stackoverflow.com/questions/36514167/how-to-really-get-the-navigation-bar-height-in-android
     public static Point getNavigationBarSize(Context context) {
         Point appUsableSize = getAppUsableScreenSize(context);
         Point realScreenSize = getRealScreenSize(context);
@@ -418,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
         return size;
     }
 
+    // Code below from https://stackoverflow.com/questions/36514167/how-to-really-get-the-navigation-bar-height-in-android
     public static Point getRealScreenSize(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();

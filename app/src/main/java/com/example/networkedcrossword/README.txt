@@ -28,7 +28,7 @@ Adding Another Run Config:
 
 Connecting two emulators:
 - Enable telnet in the control panel (for Windows)
-- Run both emulators in the ide (server on is on 10.0.2.15 & client on 10.0.2.2, it is coded to be this way)
+- Run both emulators in the ide (server is on 10.0.2.15 & client on 10.0.2.2, it is coded to be this way)
 - FOR LATER: the server should connect on port 4000 and the client should connect on port 6000 (this
 is necessary for some of the weirdness associated with connecting the emulators as opposed to two real devices)
 
@@ -85,7 +85,10 @@ object with the information from the other side.
 
 
 Board Generation:
-
+- The board is generated in it's own view called crosswordboard.
+- This view implements a canvas and 2d android graphics to render in all the squares and their associated data for each element in the board state 2d matrix.
+- Then it invalidates the ui to force a ui refresh to get the board generated on screen.
+- Once it's rendered, when the data object's board state is updated the board is re-rendered to now display the updated board state.
 
 The UI:
 - The whole game is contained in the main activity.
@@ -112,7 +115,7 @@ Group Contributions:
 - Derek:
     Created part of the Game class which and rendering in the board based on the seed.
     Created the CrosswordBoard view specifically the board generation which uses a canvas and 2d graphics to generate the board.
-    Worked on getting the network thread to communicate with the game activity and subsequent crosswordboard view.
+    Worked on getting the network thread to communicate with the game activity and subsequent crossword board view.
     
 - Joel:
     Worked with Andrew to create Server/Client connection between devices.
