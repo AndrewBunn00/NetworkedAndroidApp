@@ -85,7 +85,10 @@ object with the information from the other side.
 
 
 Board Generation:
-
+- The board is generated in it's own view called crosswordboard.
+- This view implements a canvas and 2d android graphics to render in all the squares and their associated data for each element in the board state 2d matrix.
+- Then it invalidates the ui to force a ui refresh to get the board generated on screen.
+- Once it's rendered, when the data object's board state is updated the board is re-rendered to now display the updated board state.
 
 The UI:
 - The whole game is contained in the main activity.
